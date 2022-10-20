@@ -70,18 +70,12 @@ export class Server{
         this.app.use(express.json());
         
         //Ruta estatica
-        this.app.use(express.static('public'));
+        // this.app.use(express.static('public'));
+        
+        this.app.use('/', express.static(path.join('src/public')))
         // this.app.use('/',(req:any,res:any)=>{
         //     res.sendFile(path.resolve('src/public/index.html'))
         // })
-        // const setHeadersOnStatic = (res:any, path:any, stat:any) => {
-        // const type = mime.getType(path);
-        // res.set('content-type', type);
-        // }
-        // const staticOptions = {
-        // setHeaders: setHeadersOnStatic
-        //   }
-        //   this.app.use(express.static(path.join('public'), staticOptions));
     }
 
     routes(){
@@ -110,9 +104,9 @@ export class Server{
         this.app.use(this.paths.inventario_servicios,       require('../routes/inventario_servicios'));
         this.app.use(this.paths.devolucion,       require('../routes/devoluciones'));
         this.app.use(this.paths.ventas,       require('../routes/ventas'));
-        //    this.app.get('*',(req:any,res:any)=>{
-        //     res.senfile(path.resolve(__dirname, 'public/index.html'))
-        // })
+           this.app.get('*',(req:any,res:any)=>{
+            res.sendFile(path.resolve('src/public/index.html'))
+        })
       
     }
 
