@@ -1,0 +1,38 @@
+{
+  "name": "restserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "del build",
+    "dev": "ts-node-dev src/app.ts",
+    "tsc": "tsc",
+    "start": "node build/src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@signati/core": "^4.0.2",
+    "@signati/openssl": "0.0.6",
+    "@signati/saxon": "0.0.4",
+    "bcryptjs": "^2.4.3",
+    "connect-mongo": "^4.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.0",
+    "html-pdf": "^3.0.1",
+    "id-auto-increment": "^1.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.15",
+    "nodemon": "^2.0.16",
+    "ts-node": "^10.8.2",
+    "ts-node-dev": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^18.0.1",
+    "typescript": "^4.7.4"
+  }
+}

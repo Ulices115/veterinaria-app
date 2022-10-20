@@ -1,0 +1,99 @@
+import { Response,Request} from "express"
+const bcryptjs = require('bcryptjs');
+const Usuario = require('../models/usuario');
+export class usuarios{
+    usuariosGet = async (req:any,res:Response)=>{
+        const { limite = 5, desde = 0 } = req.query;
+        const query = { estado: true }    
+        const [ total, usuarios ] = await Promise.all([
+            Usuario.countDocuments(query),
+            Usuario.find(query)
+            .skip(Number(desde))
+            .limit(Number(limite))
+        ]);
+        
+        res.json({
+            total,
+            usuarios
+        });
+    
+    } //agregado
+    usuarioget = async( req:any,res:Response ) => {
+        const { id } = req.params;
+        console.log(id);
+        
+        // const usuario = await Usuario.findById(id).populate('nombre');
+        const usuario = await Usuario.find({$or:[{'ubicacion':id},{'nombre':id}]})
+        res.json( usuario );
+        console.log('Registro encontrado');
+    }
+    
+     usuariosPut = async(req:any,res:Response)=>{
+        const { id } = req.params;
+        const {_id, password, google, ...resto } = req.body;
+        
+        if( password ) {
+            const salt = bcryptjs.genSaltSync();
+            resto.password = bcryptjs.hashSync(password, salt);    
+        }
+    
+        const usuario = await Usuario.findByIdAndUpdate( id, resto );
+            
+        res.json({
+            msg:'Actualizado',
+            usuario
+        })
+    }
+    
+    usuariosPost = async (req:any,res:Response)=>{
+    
+        const {nombre, correo, password, rol,ubicacion} = req.body;
+    
+        const usuario = new Usuario({nombre, correo, password, rol,ubicacion});
+    
+        const salt = bcryptjs.genSaltSync();
+    
+        usuario.password = bcryptjs.hashSync(password, salt);
+    
+        await usuario.save();
+        
+        res.json({
+            usuario
+        })
+    }
+    
+    usuariosDelete = async (req:any,res:Response)=>{
+        const { id,estado } = req.params;
+        const usuario = await Usuario.findById(id,estado);
+        if(usuario.estado==true){
+                 //const { id } = req.params;
+    
+                const usuario = await Usuario.findByIdAndUpdate( id, { estado: false } );
+                const usuarioAutenticado = req.usuario;
+        
+                res.json({
+                    usuario,
+                    usuarioAutenticado
+                })
+                console.log('El usuario: '+ usuario.nombre +' fue eliminado/inhabilitado '+ 'por '+ usuarioAutenticado.nombre);
+        } else{
+            res.json({
+                       msg:'El usuario no existe o ya fue eliminado'
+                 })
+                 //console.log(usuario.estado);
+        }
+       
+    }
+    
+     usuariosPatch = (req:any,res:Response)=>{
+        res.json({
+            msg:'Patch'
+        })
+    }
+}
+
+export default new usuarios();
+
+
+
+

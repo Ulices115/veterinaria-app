@@ -1,0 +1,139 @@
+const ObjectId = require('mongoose').Types.ObjectId;
+export const { 
+    Role, 
+    Usuario,
+    b_p,
+    pedido,
+    Servicio,
+    producto,
+    ubicacion,
+    inventario,
+    inventario_servicios,
+    devoluciones,
+} = require('../models'); 
+export class validacionesdb{
+    id_ubicacion=''
+    ubicacion=''
+     esRoleValido = async(rol='') => {
+        console.log('rol es',rol);
+        const existeRol = await Role.findOne({rol:rol});
+        console.log(existeRol);
+        if (!existeRol){
+            throw new Error(`El rol ${ rol } no esta registrado en la base de datos`)
+        }
+    }
+    
+     existeEmail = async(correo ='') => {
+        const existe = await Usuario.findOne({correo});
+        if(existe){
+            throw new Error(`El correo: ${ correo } ya existe`)
+        }
+    } 
+    
+    existeUsuarioPorId = async( id:any ) => {
+        const existeUsuario = await Usuario.findById( id )
+        if( !existeUsuario ){
+            throw new Error(`No existe id del usuario ${id}`);
+        }
+    }
+      
+    existeservicio = async( id:any ) => {       
+        const existeservicio = await Servicio.findOne( {'descripcion':id}) 
+        if( existeservicio){
+            throw new Error(`ya existe el servicio${id}`);
+        }
+    }
+    existeproducto = async( id:any ) => { 
+        const existeproducto = await producto.findOne({'descripcion':id.toUpperCase()}) 
+        if( existeproducto){
+            throw new Error(`ya existe el producto${id}`);
+        }
+    }
+    existeubicacion = async( id:any ) => { 
+        const existeubicacion = await ubicacion.findOne({'descripcion':id.toUpperCase()}) 
+        if( existeubicacion){
+            throw new Error(`ya existe el producto${id}`);
+        }
+    }
+
+    existeinventario= async (id:any ) =>{
+        const inv= await inventario.findById(id);
+        console.log(inv['cantidad']);
+                 if(inv['cantidad']>0){
+            throw new Error(`Inventario con existencias `);
+        }
+        
+    }
+    existeinventarioubi= async (id:any ) =>{
+        this.id_ubicacion=id
+        }
+    
+    existeinventarioprod= async (id:any) =>{
+            const existeinv = await inventario.findOne({$and : [{'id_producto':id}, {'ubicacion':this.id_ubicacion}]});
+            if(existeinv){
+                throw new Error(`El producto: ${id} ya existe  `);
+                
+            }
+        }
+
+    existeservicioubi= async (id:any ) =>{
+            this.ubicacion=id
+            }
+        
+    existeinventarioservicio= async (id:any) =>{
+                const existeinv = await inventario_servicios.findOne({$and : [{'id_servicio':id}, {'ubicacion':this.ubicacion}]});  
+                if(existeinv){
+                    throw new Error(`El servicio ya existe  `);
+  
+                }
+            }
+    esproductodevuelto= async (id:any) =>{
+        console.log(id);
+        
+                const existeinv = await producto.find({'descripcion':id})
+                console.log(existeinv);
+                
+                if(existeinv.length==0){
+                    throw new Error(`La devolucion no es un producto `);
+  
+                }
+            }
+    
+    //  existeRolePorId = async( id:any ) => {
+    //     const existeRol = await Role.findById( id );
+    //     if( !existeRol ){
+    //         throw new Error(`No existe id del Rol: ${id}`);
+    //     }
+    // }
+    
+    existeb_pPorId = async( id:any ) => {
+        const existeb_p = await b_p.findById( id );
+        if( !existeb_p ){
+            throw new Error(`No existe id del b_p ${id}`);
+        }
+    }
+    existepedidob_p = async( id:any ) => {
+        const b_ps = await b_p.findById( id );
+        const pedidos = await pedido.find({$and:[{'id_b_p':b_ps['id_b_p']},{status_log:'pendiente'}]})
+        console.log('pedidos',pedidos);
+        
+        if( pedidos.length>0 ){
+            throw new Error(`existen pedidos pendientes para eñ b_p`);
+        }
+    }
+    existepedidoPorId = async( id:any ) => {
+        const existepedido = await pedido.findById( id );
+        if( !existepedido ){
+            throw new Error(`No existe id del pedido ${id}`);
+        }
+    }
+    existepedido= async( id_pedido:any ) => {
+        const existepedido = await pedido.find({'id_pedido':id_pedido });
+        if( !existepedido ){
+            throw new Error(`ya existe id del pedido ${id_pedido}`);
+        }
+    }
+    
+}
+
+export default new validacionesdb();
