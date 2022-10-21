@@ -1,6 +1,9 @@
 {
   "name": "restserver",
   "version": "1.0.0",
+  "engines": {
+    "node": "v16.14.2"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
