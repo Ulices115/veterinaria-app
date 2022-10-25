@@ -13,6 +13,7 @@ const Pedidodetalle = require("../models/pedidodetalle");
 export class Controller{   
      async cfdi(req:Request,res:Response) {
  try { 
+  var referencia;
   var descripcion;
   var cantidad;
   var precio;
@@ -25,18 +26,20 @@ export class Controller{
   var regimen;
   var cpostal;
   var id_cliente;
+  var iva=0;
   const { id } = req.params;
   const pedidod = await Pedidodetalle.find({"id_pedido":id});
   // para generar el subtotal-total
       for(const ped in pedidod){
         importe=pedidod[ped]['importe']
+        iva+=(pedidod[ped]['importe']*.16)
         SubTotal+= Number(importe) 
-        total=SubTotal
+        total=SubTotal + iva
       }
     // Creacion del cfdi 
     const key = './src/CSD_FUNK671228PH6_20190528174303/CSD_KARLA_FUENTE_NOLASCO_FUNK671228PH6_20190528_174243.key';
     const cer = './src/CSD_FUNK671228PH6_20190528174303/CSD_KARLA_FUENTE_NOLASCO_FUNK671228PH6_20190528_174243s.cer';
-    const styleSheet = './src/CSD_FUNK671228PH6_20190528174303/cadena_original.xslt';
+    const styleSheet = './src/CSD_FUNK671228PH6_20190528174303/cadenaoriginal_4_0.xslt';
     var fecha = new Date().toString();
     var data = moment(fecha).format('YYYY-MM-DDThh:mm:ss')
     // const fecha =moment.tz('America/Mexico_City').format('YYYY-MM-DDThh:mm:ss'); 
@@ -64,9 +67,9 @@ export class Controller{
     });
     await cfdi.setAttributesXml({version: '1.0', encoding: 'utf-8'});
     // UUID
-    const relation = new Relacionado({ TipoRelacion: '01' });
-    relation.addRelation('4A1B43E2-1183-4AD4-A3DE-C2DA787AE56A');
-    await cfdi.relacionados(relation);
+    // const relation = new Relacionado({ TipoRelacion: '01' });
+    // relation.addRelation('4A1B43E2-1183-4AD4-A3DE-C2DA787AE56A');
+    // await cfdi.relacionados(relation);
     
     const emisor = new Emisor({
                     Rfc: 'FUNK671228PH6',
@@ -116,13 +119,14 @@ export class Controller{
       cantidad=pedidod[ped]['cantidad']
       precio=pedidod[ped]['precio']
       importe=pedidod[ped]['importe']
+      referencia=pedidod[ped]['referencia'];
         
         const concepto = new Concepts({
           ClaveProdServ: '70122000', 
-          NoIdentificacion: '1',
+          NoIdentificacion: referencia,
           Cantidad: cantidad,
-          ClaveUnidad: '1',
-          Unidad: '1',
+          ClaveUnidad: 'E48',
+          Unidad: 'SV',
           Descripcion: descripcion,
           ValorUnitario: precio,
           Importe: importe,
@@ -130,20 +134,19 @@ export class Controller{
           ObjetoImp: '01'
       });
    concepto.traslado({
-         Base: '',
-         Impuesto: '',
-         TipoFactor: '',
-         TasaOCuota: '',
-         Importe: '',
+         Base: importe,
+         Impuesto: '002',
+         TipoFactor: 'tasa',
+         TasaOCuota: '0.16',
+         Importe: (importe*.16).toString(),
    });
-
-   concepto.retencion({
-         Base: '',
-         Impuesto: '',
-         TipoFactor: '',
-         TasaOCuota: '',
-         Importe: '',
-   });
+  //  concepto.retencion({
+  //        Base: '',
+  //        Impuesto: '',
+  //        TipoFactor: '',
+  //        TasaOCuota: '',
+  //        Importe: '',
+  //  });
   //  complemento de concepto opcional
   //  const ieduObject: XmlIeduAttribute = {
   //      version: '1.0',
@@ -158,18 +161,18 @@ export class Controller{
      await cfdi.concepto(concepto);
     }
     // fin del for
-    const impuesto: Impuestos = new Impuestos({ TotalImpuestosRetenidos: '1000' });
+    const impuesto: Impuestos = new Impuestos({ TotalImpuestosTrasladados:iva.toString()});
     impuesto.traslados({
-      Base: 1,
+      Base: SubTotal,
       Impuesto: '002',
       TipoFactor: 'Tasa',
       TasaOCuota: '0.16',
-      Importe: '59.17',
+      Importe: iva.toString(),
     });
-    impuesto.retenciones({
-      Impuesto: '002',
-      Importe: '59.17',
-    });
+    // impuesto.retenciones({
+    //   Impuesto: '002',
+    //   Importe: '59.17',
+    // });
     await cfdi.impuesto(impuesto)
     await cfdi.certificar(cer);
     await cfdi.sellar(key, '12345678a');
@@ -179,6 +182,20 @@ export class Controller{
     //  res.send(await cfdi.getJsonCdfi());
     console.log('Cfdi 4.0 generado');
     
+    // let codificado= btoa(xml)
+    // console.log(codificado);
+    
+    // let decodificado = atob(codificado);
+    // console.log(decodificado);
+
+    // var soap = require('soap');
+    // var url = 'http://www.gcomputer.net/webservices/dilbert.asmx?wsdl';
+    // soap.createClient(url, function(_err:any, client:any) {
+    //     client.DailyDilbert({ ADate: "2019-11-02" }, function(err:any, result:any) {
+    //         if(err) return console.log(err);
+    //         console.log(result.DailyDilbertResult);
+    //     });
+    // });
      }
      catch (e) {
      

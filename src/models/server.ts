@@ -13,7 +13,7 @@ export class Server{
         usuarios: string; b_p: string; servicio: string; pedido: string; pedidodetalle: string; cfdi: string;
          pais:string; estado:string; regimen:string; clave:string; municipio:string; localidad:string; codigop:string;
          colonia:string; inventario:string; factura:string; producto:string; ubicacion:string; auditoria:string;
-         orden:string; ordendetalle:string; inventario_servicios:string; devolucion:string; ventas:string;
+         orden:string; ordendetalle:string; inventario_servicios:string; devolucion:string; ventas:string; movimientos:string;
     };
     constructor(){
         this.app = express();
@@ -43,7 +43,8 @@ export class Server{
             ordendetalle:   '/api/ordencompradetalle',
             inventario_servicios:   '/api/inventarioservicios',     
             devolucion:    '/api/devoluciones',
-            ventas:         '/api/ventas'
+            ventas:         '/api/ventas',
+            movimientos:    '/api/movimientos'
         }
         
         //Cnectar a base de datos
@@ -104,6 +105,7 @@ export class Server{
         this.app.use(this.paths.inventario_servicios,       require('../routes/inventario_servicios'));
         this.app.use(this.paths.devolucion,       require('../routes/devoluciones'));
         this.app.use(this.paths.ventas,       require('../routes/ventas'));
+        this.app.use(this.paths.movimientos,       require('../routes/movimiento_inv'));
            this.app.get('*',(req:any,res:any)=>{
             res.sendFile(path.resolve('src/public/index.html'))
         })

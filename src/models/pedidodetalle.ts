@@ -1,6 +1,7 @@
 import { model, Schema, Document } from 'mongoose';
 interface pedido extends Document{
     id_pedido: string;
+    referencia:string;
     descripcion: string;
     cantidad:number;
     activo:  Boolean;
@@ -12,6 +13,10 @@ const PedidodetalleSchema = new Schema<pedido>({
     id_pedido:{
         type: String,
         required: [true, 'El id es obligatorio']
+    },
+    referencia:{
+        type:String,
+        required:[true,'referencia es obligatorio']
     },
     descripcion:{
         type:String,

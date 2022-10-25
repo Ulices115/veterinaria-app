@@ -3,6 +3,7 @@ import { ClientSession } from "mongoose";
 const Ordendetalle = require("../models/ordencompradetalle");
 const Orden = require("../models/ordencompra");
 const inventario = require("../models/inventario");
+const movimientos = require("../models/movimientos_inv");
 export class orden{
      crearorden = async ( req:any,res:Response) => {
         const session: ClientSession = await Orden.startSession();
@@ -111,10 +112,23 @@ export class orden{
         console.log('ordendetalle',ordendetalle);
         for(const producto in ordendetalle){
             // console.log('producto y cantidad',ordendetalle[producto]['producto'],ordendetalle[producto]['cantidad']);
-             const inventariores = await inventario.find({$and:[{'id_producto':ordendetalle[producto]['producto']},{ubicacion:ubi}]})
-             const nuevaexistencias=inventariores[0]['cantidad']+ordendetalle[producto]['cantidad']
+             const inventarios = await inventario.find({$and:[{'id_producto':ordendetalle[producto]['producto']},{ubicacion:ubi}]})
+             const nuevaexistencias=inventarios[0]['cantidad']+ordendetalle[producto]['cantidad']
 
               await inventario.updateOne({$and:[{id_producto:ordendetalle[producto]['producto']},{ubicacion:ubi}]},{cantidad:nuevaexistencias})
+
+              const datos = {
+                referencia:data.id_orden,
+                ubicacion:ubi,
+                fecha:new Date,
+                tipo:'Entrada',
+                tipo_ajuste:'Orden de compra',
+                cantidad_inicial:inventarios[0]['cantidad'],
+                cantidad_final:nuevaexistencias
+            }
+            console.log('movimiento_inv creada');
+            const movimiento = await new movimientos(datos);
+            await movimiento.save();  
         }
     
     }
