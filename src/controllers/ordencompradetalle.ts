@@ -66,12 +66,12 @@ export class ordenD{
         // const ordend = await Ordendetalle.find({activo:true,"id_orden":id.toUpperCase()});
         const ordend= await Ordendetalle.aggregate([{$match:{"id_orden":id.toUpperCase()}},
             { "$lookup": {
-                from: "productos",
-                foreignField: "id_producto",
+                from: "productos_servicios",
+                foreignField: "id_prod_serv",
                 localField: "producto",
-                as: "productos"
+                as: "productos_servicios"
               }},
-              { $unwind: "$productos"},
+              { $unwind: "$productos_servicios"},
               { $match: {activo:true}} ])
         res.json( ordend);
         console.log('Registro encontrado');

@@ -14,7 +14,7 @@ const router = Router();
 router.post('/', [
     // validarjwt.validarJWT,
     check('id_servicio','El nombre es obligatorio').not().isEmpty(),
-    check('descripcion').custom(validaciones.existeservicio),
+    // check('descripcion').custom(validaciones.existeservicio),
     validarcampos.validarCampos
 ], servicio.crearservicio)
 

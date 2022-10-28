@@ -2,8 +2,7 @@ import { Response,Request} from "express"
 import { ClientSession } from "mongoose";
 const ObjectId = require('mongoose').Types.ObjectId;
 const Pedidodetalle = require("../models/pedidodetalle");
-const Producto = require("../models/producto");
-const inventario = require("../models/inventario");
+const inventario_general = require("../models/inventario_general");
 
 const movimientos = require("../models/movimientos_inv");
 export class pedidoD{
@@ -31,41 +30,31 @@ export class pedidoD{
           importe
         }
         try {
-
-        
+     
             const pedidod = await new Pedidodetalle(data);
              await pedidod.save(); 
             console.log('Registro agregado');
             res.status(200).json(data);
-             const producto= await Producto.find({'descripcion':pedidod['descripcion']})
-             console.log(producto);
-             
-             if(producto.length>0){
-                const inventarios = await inventario.find({$and:[{'id_producto':producto[0]['id_producto']},{ubicacion:req.query.ubi}]})
-                console.log(inventarios);
-                
-                const nuevaexistencias=inventarios[0]['cantidad']-pedidod['cantidad'] 
-                console.log(nuevaexistencias);
-                
-                 await inventario.updateOne({$and:[{id_producto:producto[0]['id_producto']},{ubicacion:req.query.ubi}]},{cantidad:nuevaexistencias})
-                console.log('inventario actualizado');        
-                
+            const inventario= await inventario_general.find({'id_inventario':pedidod['referencia']})            
+            if(inventario[0]['tipo']=='Producto'){
+                const nuevaexistencias=inventario[0]['cantidad']-pedidod['cantidad'] 
+                await inventario_general.updateOne({$and:[{id_inventario:pedidod['referencia']},{ubicacion:req.query.ubi}]},{cantidad:nuevaexistencias})
+                console.log('inventario actualizado');    
                 const data = {
                     referencia:id_pedido,
                     ubicacion:req.query.ubi,
                     fecha:new Date,
                     tipo:'Salida',
                     tipo_ajuste:'Pedido',
-                    cantidad_inicial:inventarios[0]['cantidad'],
+                    cantidad_inicial:inventario[0]['cantidad'],
                     cantidad_final:nuevaexistencias
                 }
                 console.log('movimiento_inv creada');
                 const movimiento = await new movimientos(data);
                 await movimiento.save();  
             }else{
-                console.log('no es producto para actualizar inventario');
-                
-             }
+                console.log('no es producto para actualizar inventario');   
+            }
 
             await session.commitTransaction();
         } catch (error) {
@@ -107,64 +96,56 @@ export class pedidoD{
         console.log('ubi',req.query.pedido);
         try {
            if( ObjectId.isValid(req.params.id)){
-                 let pedidod = await Pedidodetalle.findOne({"_id":req.params.id });
-                 const producto= await Producto.findOne({'descripcion':pedidod['descripcion']})  
-            if(producto){      
-                console.log('inventario actualizado');
-                         
-                const inventariores = await inventario.findOne({$and:[{'id_producto':producto['id_producto']},{ubicacion:req.query.ubi}]})
-                const nuevaexistencias=inventariores['cantidad']+pedidod['cantidad'] 
-                await inventario.updateOne({$and:[{id_producto:producto['id_producto']},{ubicacion:req.query.ubi}]},{cantidad:nuevaexistencias})
+                let pedidod = await Pedidodetalle.findOne({"_id":req.params.id });
+                const inventario= await inventario_general.find({'id_inventario':pedidod['referencia']})            
+                if(inventario[0]['tipo']=='Producto'){
+                    const nuevaexistencias=inventario[0]['cantidad']+pedidod['cantidad'] 
+                    await inventario_general.updateOne({$and:[{id_inventario:pedidod['referencia']},{ubicacion:req.query.ubi}]},{cantidad:nuevaexistencias})
+                    console.log('inventario actualizado');  
 
-                
-                const data = {
-                    referencia:req.query.pedido,
-                    ubicacion:req.query.ubi,
-                    fecha:new Date,
-                    tipo:'Entrada',
-                    tipo_ajuste:'Pedido detalle eliminado',
-                    cantidad_inicial:inventariores['cantidad'],
-                    cantidad_final:nuevaexistencias
-                }
-                console.log('movimiento_inv creada');
-                const movimiento = await new movimientos(data);
-                await movimiento.save(); 
-             }else{
-                console.log('no es producto para actualizar inventario');
-                
-            }
-             await Pedidodetalle.findOneAndRemove({ _id: req.params.id })
-            
-            res.json({ msg: 'Pedidodetalle eliminado con exito' });
-           }else{
-             let pedidod = await Pedidodetalle.find({"id_pedido":req.params.id });
-             for(const pedido in pedidod){
-                const producto= await Producto.find({'descripcion':pedidod[pedido]['descripcion']})   
-                if(producto.length>0){      
-                   for(const valor in producto){
-                    console.log('inventario actualizado');
-                    const inventariores = await inventario.findOne({$and:[{'id_producto':producto[valor]['id_producto']},{ubicacion:req.query.ubi}]})    
-                    const nuevaexistencias=inventariores['cantidad']+pedidod[pedido]['cantidad'] 
-                     await inventario.updateOne({$and:[{id_producto:producto[valor]['id_producto']},{ubicacion:req.query.ubi}]},{cantidad:nuevaexistencias})
-
-                     const data = {
-                        referencia:req.params.id ,
+                    const data = {
+                        referencia:req.query.pedido,
                         ubicacion:req.query.ubi,
                         fecha:new Date,
                         tipo:'Entrada',
-                        tipo_ajuste:'Pedido cancelado',
-                        cantidad_inicial:inventariores['cantidad'],
+                        tipo_ajuste:'Pedido detalle eliminado',
+                        cantidad_inicial:inventario[0]['cantidad'],
                         cantidad_final:nuevaexistencias
                     }
                     console.log('movimiento_inv creada');
                     const movimiento = await new movimientos(data);
                     await movimiento.save(); 
-                   }
                 }else{
-                console.log('no es producto para actualizar inventario');
-                
+                    console.log('no es producto para actualizar inventario');   
                 }
-             }
+             await Pedidodetalle.findOneAndRemove({ _id: req.params.id })
+            
+            res.json({ msg: 'Pedidodetalle eliminado con exito' });
+           }else{
+             let pedidod = await Pedidodetalle.find({"id_pedido":req.params.id });        
+             for(const pedidos in pedidod){
+                const inventario= await inventario_general.find({'id_inventario':pedidod[pedidos]['referencia']})         
+                if(inventario[0]['tipo']=='Producto'){
+                    const nuevaexistencias=inventario[0]['cantidad']+pedidod[pedidos]['cantidad'] 
+                    await inventario_general.updateOne({$and:[{id_inventario:pedidod[pedidos]['referencia']},{ubicacion:req.query.ubi}]},{cantidad:nuevaexistencias})
+                    console.log('inventario actualizado');  
+
+                    const data = {
+                        referencia:req.params.id ,
+                        ubicacion:req.query.ubi,
+                        fecha:new Date,
+                        tipo:'Entrada',
+                        tipo_ajuste:'Pedido cancelado',
+                        cantidad_inicial:inventario[0]['cantidad'],
+                        cantidad_final:nuevaexistencias
+                    }
+                    console.log('movimiento_inv creada');
+                    const movimiento = await new movimientos(data);
+                    await movimiento.save(); 
+                }else{
+                    console.log('no es producto para actualizar inventario');   
+                }
+             }  
                   await Pedidodetalle.updateMany({"id_pedido":req.params.id },{activo:false},{new:true})
                   console.log('pedidodetalle',Pedidodetalle);
                   

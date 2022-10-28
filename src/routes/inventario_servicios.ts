@@ -15,7 +15,7 @@ router.post('/', [
     // validarjwt.validarJWT,
     check('ubicacion','El id del servicio es obligatorio').not().isEmpty(),
     check('ubicacion').custom(validaciones. existeservicioubi),
-    check('id_servicio').custom(validaciones.existeinventarioservicio),
+    // check('id_servicio').custom(validaciones.existeinventarioservicio),
     validarcampos.validarCampos
 ], servicio.crearservicio)
 

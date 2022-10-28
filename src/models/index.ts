@@ -17,6 +17,8 @@ export const ordencompradetalle=  require('./ordencompradetalle')
 export const inventario_servicios=require('./inventario_servicios')
 export const devoluciones=        require('./devoluciones')
 export const movimientos =        require('./movimientos_inv')
+export const inventario_general = require('./inventario_general')
+export const producto_servicio =  require('./productos_servicios')          
 module.exports = {
     // Categoria,
     Municipio,
@@ -37,6 +39,8 @@ module.exports = {
     ordencompradetalle,
     inventario_servicios,
     devoluciones,
-    movimientos
+    movimientos,
+    inventario_general,
+    producto_servicio
    
 }

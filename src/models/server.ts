@@ -14,37 +14,40 @@ export class Server{
          pais:string; estado:string; regimen:string; clave:string; municipio:string; localidad:string; codigop:string;
          colonia:string; inventario:string; factura:string; producto:string; ubicacion:string; auditoria:string;
          orden:string; ordendetalle:string; inventario_servicios:string; devolucion:string; ventas:string; movimientos:string;
+         inventario_general:string; producto_servicio:string;
     };
     constructor(){
         this.app = express();
         this.port = process.env.PORT;
         this.paths = {
-            auth:           '/api/auth',
-            usuarios:       '/api/usuarios',
-            b_p:            '/api/b_p',
-            servicio:       '/api/servicio',
-            pedido:         '/api/pedido',
-            pedidodetalle:  '/api/pedidodetalle',
-            cfdi:           '/api/cfdi',
-            pais:           '/api/pais',   
-            estado:           '/api/estado',   
-            regimen:           '/api/regimen',   
-            clave:              '/api/clave',   
-            municipio:       '/api/municipio',
-            localidad:      '/api/localidad' ,
-            codigop:        '/api/codigop',
-            colonia:        '/api/colonia',
-            inventario:       '/api/inventario',
-            producto:        '/api/producto',
-            factura:        '/api/factura',
-            ubicacion:      '/api/ubicacion',
-            auditoria:  '/api/auditoria',
-            orden:      '/api/orden',
-            ordendetalle:   '/api/ordencompradetalle',
+            auth:                   '/api/auth',
+            usuarios:               '/api/usuarios',
+            b_p:                    '/api/b_p',
+            servicio:               '/api/servicio',
+            pedido:                 '/api/pedido',
+            pedidodetalle:          '/api/pedidodetalle',
+            cfdi:                   '/api/cfdi',
+            pais:                   '/api/pais',   
+            estado:                 '/api/estado',   
+            regimen:                '/api/regimen',   
+            clave:                  '/api/clave',   
+            municipio:              '/api/municipio',
+            localidad:              '/api/localidad' ,
+            codigop:                '/api/codigop',
+            colonia:                '/api/colonia',
+            inventario:             '/api/inventario',
+            producto:               '/api/producto',
+            factura:                '/api/factura',
+            ubicacion:              '/api/ubicacion',
+            auditoria:              '/api/auditoria',
+            orden:                  '/api/orden',
+            ordendetalle:           '/api/ordencompradetalle',
             inventario_servicios:   '/api/inventarioservicios',     
-            devolucion:    '/api/devoluciones',
-            ventas:         '/api/ventas',
-            movimientos:    '/api/movimientos'
+            devolucion:             '/api/devoluciones',
+            ventas:                 '/api/ventas',
+            movimientos:            '/api/movimientos',
+            inventario_general:     '/api/inventario_general',
+            producto_servicio:      '/api/producto_servicio'
         }
         
         //Cnectar a base de datos
@@ -80,32 +83,34 @@ export class Server{
     }
 
     routes(){
-        this.app.use(this.paths.auth,           require('../routes/auth'));
-        this.app.use(this.paths.usuarios,       require('../routes/usuarios'));
-        this.app.use(this.paths.b_p,       require('../routes/b_p'));
-        this.app.use(this.paths.servicio,       require('../routes/servicio'));
-        this.app.use(this.paths.pedido,       require('../routes/pedido'));
-        this.app.use(this.paths.pedidodetalle,       require('../routes/pedidodetalle'));
-        this.app.use(this.paths.cfdi,       require('../routes/cfdi'));
-        this.app.use(this.paths.pais,       require('../routes/pais'));
-        this.app.use(this.paths.estado,       require('../routes/estado'));
-        this.app.use(this.paths.regimen,       require('../routes/regimen fiscal'));
-        this.app.use(this.paths.clave,       require('../routes/clave usof'));
-        this.app.use(this.paths.municipio,       require('../routes/municipio'));
-        this.app.use(this.paths.localidad,       require('../routes/localidad'));
-        this.app.use(this.paths.codigop,       require('../routes/codigop'));
-        this.app.use(this.paths.colonia,       require('../routes/colonia'));
-        this.app.use(this.paths.inventario,       require('../routes/inventario'));
-        this.app.use(this.paths.factura,       require('../routes/factura'));
-        this.app.use(this.paths.producto,       require('../routes/producto'));
-        this.app.use(this.paths.ubicacion,       require('../routes/ubicacion'));
-        this.app.use(this.paths.auditoria,       require('../routes/auditoria'));
-        this.app.use(this.paths.orden,       require('../routes/ordencompra'));
+        this.app.use(this.paths.auth,               require('../routes/auth'));
+        this.app.use(this.paths.usuarios,           require('../routes/usuarios'));
+        this.app.use(this.paths.b_p,                require('../routes/b_p'));
+        this.app.use(this.paths.servicio,           require('../routes/servicio'));
+        this.app.use(this.paths.pedido,             require('../routes/pedido'));
+        this.app.use(this.paths.pedidodetalle,      require('../routes/pedidodetalle'));
+        this.app.use(this.paths.cfdi,               require('../routes/cfdi'));
+        this.app.use(this.paths.pais,               require('../routes/pais'));
+        this.app.use(this.paths.estado,             require('../routes/estado'));
+        this.app.use(this.paths.regimen,            require('../routes/regimen fiscal'));
+        this.app.use(this.paths.clave,              require('../routes/clave usof'));
+        this.app.use(this.paths.municipio,          require('../routes/municipio'));
+        this.app.use(this.paths.localidad,          require('../routes/localidad'));
+        this.app.use(this.paths.codigop,            require('../routes/codigop'));
+        this.app.use(this.paths.colonia,            require('../routes/colonia'));
+        this.app.use(this.paths.inventario,         require('../routes/inventario'));
+        this.app.use(this.paths.factura,            require('../routes/factura'));
+        this.app.use(this.paths.producto,           require('../routes/producto'));
+        this.app.use(this.paths.ubicacion,          require('../routes/ubicacion'));
+        this.app.use(this.paths.auditoria,          require('../routes/auditoria'));
+        this.app.use(this.paths.orden,              require('../routes/ordencompra'));
         this.app.use(this.paths.ordendetalle,       require('../routes/ordencompradetalle'));
-        this.app.use(this.paths.inventario_servicios,       require('../routes/inventario_servicios'));
-        this.app.use(this.paths.devolucion,       require('../routes/devoluciones'));
-        this.app.use(this.paths.ventas,       require('../routes/ventas'));
-        this.app.use(this.paths.movimientos,       require('../routes/movimiento_inv'));
+        this.app.use(this.paths.inventario_servicios,      require('../routes/inventario_servicios'));
+        this.app.use(this.paths.devolucion,         require('../routes/devoluciones'));
+        this.app.use(this.paths.ventas,             require('../routes/ventas'));
+        this.app.use(this.paths.movimientos,        require('../routes/movimiento_inv'));
+        this.app.use(this.paths.inventario_general,        require('../routes/inventario_general'));
+        this.app.use(this.paths.producto_servicio,           require('../routes/productos_servicios'));
            this.app.get('*',(req:any,res:any)=>{
             res.sendFile(path.resolve('src/public/index.html'))
         })

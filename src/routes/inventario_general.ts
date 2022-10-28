@@ -1,7 +1,7 @@
 import { Router } from "express";
 const { check } = require('express-validator'); 
 // ---------------------------------------
-import inventario from '../controllers/inventario'
+import inventario from '../controllers/inventario_general'
 import validarcampos  from '../middlewares/validar-campos';
 import validaciones from '../helpers/db-validators'
 import validarjwt from '../middlewares/validar-jwt'
@@ -10,7 +10,8 @@ const router = Router();
 router.post('/',[
     check('ubicacion','El id producto es obligatorio').not().isEmpty(),
     check('ubicacion').custom(validaciones. existeinventarioubi),
-    // check('id_producto').custom(validaciones.existeinventarioprod),
+    check('tipo').custom(validaciones.existetipo),
+    check('id_prod_serv').custom(validaciones.existeinventarioprod_serv),
     // check('inventarios').custom(validaciones.existeinventarioprod),
     validarcampos.validarCampos,
 ],inventario.crearinventario)
@@ -25,7 +26,7 @@ router.get('/:id', [
 
 router.put('/:id', [
     // validarjwt.validarJWT,
-    check( 'id_producto', 'El id producto es obligatorio').not().isEmpty(),
+    check( 'id_prod_serv', 'El id_prod_serv es obligatorio').not().isEmpty(),
     validarcampos.validarCampos
 ], inventario.actualizarinventario)
 

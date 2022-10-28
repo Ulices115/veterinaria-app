@@ -2,7 +2,7 @@ import { Response,Request} from "express"
 import { ClientSession } from "mongoose";
 const Ordendetalle = require("../models/ordencompradetalle");
 const Orden = require("../models/ordencompra");
-const inventario = require("../models/inventario");
+const inventario_general = require("../models/inventario_general");
 const movimientos = require("../models/movimientos_inv");
 export class orden{
      crearorden = async ( req:any,res:Response) => {
@@ -112,10 +112,10 @@ export class orden{
         console.log('ordendetalle',ordendetalle);
         for(const producto in ordendetalle){
             // console.log('producto y cantidad',ordendetalle[producto]['producto'],ordendetalle[producto]['cantidad']);
-             const inventarios = await inventario.find({$and:[{'id_producto':ordendetalle[producto]['producto']},{ubicacion:ubi}]})
+             const inventarios = await inventario_general.find({$and:[{'id_prod_serv':ordendetalle[producto]['producto']},{ubicacion:ubi}]})
              const nuevaexistencias=inventarios[0]['cantidad']+ordendetalle[producto]['cantidad']
 
-              await inventario.updateOne({$and:[{id_producto:ordendetalle[producto]['producto']},{ubicacion:ubi}]},{cantidad:nuevaexistencias})
+              await inventario_general.updateOne({$and:[{id_prod_serv:ordendetalle[producto]['producto']},{ubicacion:ubi}]},{cantidad:nuevaexistencias})
 
               const datos = {
                 referencia:data.id_orden,

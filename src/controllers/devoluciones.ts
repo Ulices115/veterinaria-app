@@ -1,6 +1,6 @@
 import { Response,Request} from "express"
 const Devoluciones = require("../models/devoluciones");
-const inventario = require("../models/inventario");
+const inventario_general = require("../models/inventario_general");
 export class devolucion{
     creardevolucion = async ( req:any,res:Response) => {
         const id_devolucion= req.body.id_devolucion.toUpperCase() 
@@ -36,28 +36,10 @@ export class devolucion{
         res.status(200).json(data);
 
         var {ubi} = req.query
-        const devoluciones = await Devoluciones.aggregate([
-            { "$lookup": {
-                from: "productos",
-                foreignField: "descripcion",
-                localField: "descripcion",
-                as: "productos"
-              }},
-              { $unwind: "$productos"},
-              { $match: {'id_pedido': data.id_pedido}},
-              { $match: {activo:true}},
-        ])
-        console.log(devoluciones);
-        // if(devoluciones.length>0){
-            const inventarios = await inventario.find({$and:[{'id_producto':devoluciones[devoluciones.length - 1]['productos']['id_producto']},{ubicacion:ubi}]})
-            const nuevaexistencias=inventarios[0]['cantidad']+devoluciones[devoluciones.length - 1]['cantidad_devuelta']
-            await inventario.updateOne({$and:[{id_producto:devoluciones[devoluciones.length - 1]['productos']['id_producto']},{ubicacion:ubi}]},{cantidad:nuevaexistencias})
-        // }else{
-        //     console.log('no es un producto');
-           
-        // }
-        
- 
+            const inventarios = await inventario_general.find({$and:[{'id_inventario':req.body.referencia},{ubicacion:ubi}]})
+            const nuevaexistencias=inventarios[0]['cantidad']+ req.body.cantidad_devuelta
+            console.log(nuevaexistencias);
+            await inventario_general.updateOne({$and:[{'id_inventario':req.body.referencia},{ubicacion:ubi}]},{cantidad:nuevaexistencias})
     }
     obtenerdevoluciones = async ( req:Request,res:Response) => {
         try {
