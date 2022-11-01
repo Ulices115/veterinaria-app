@@ -10,10 +10,10 @@ export class Server{
     paths: {
         auth: string;
         // categorias:     '/api/categorias',
-        usuarios: string; b_p: string; servicio: string; pedido: string; pedidodetalle: string; cfdi: string;
+        usuarios: string; b_p: string;pedido: string; pedidodetalle: string; cfdi: string;
          pais:string; estado:string; regimen:string; clave:string; municipio:string; localidad:string; codigop:string;
-         colonia:string; inventario:string; factura:string; producto:string; ubicacion:string; auditoria:string;
-         orden:string; ordendetalle:string; inventario_servicios:string; devolucion:string; ventas:string; movimientos:string;
+         colonia:string; factura:string;  ubicacion:string; auditoria:string;
+         orden:string; ordendetalle:string; devolucion:string; ventas:string; movimientos:string;
          inventario_general:string; producto_servicio:string;
     };
     constructor(){
@@ -23,7 +23,6 @@ export class Server{
             auth:                   '/api/auth',
             usuarios:               '/api/usuarios',
             b_p:                    '/api/b_p',
-            servicio:               '/api/servicio',
             pedido:                 '/api/pedido',
             pedidodetalle:          '/api/pedidodetalle',
             cfdi:                   '/api/cfdi',
@@ -35,14 +34,11 @@ export class Server{
             localidad:              '/api/localidad' ,
             codigop:                '/api/codigop',
             colonia:                '/api/colonia',
-            inventario:             '/api/inventario',
-            producto:               '/api/producto',
             factura:                '/api/factura',
             ubicacion:              '/api/ubicacion',
             auditoria:              '/api/auditoria',
             orden:                  '/api/orden',
-            ordendetalle:           '/api/ordencompradetalle',
-            inventario_servicios:   '/api/inventarioservicios',     
+            ordendetalle:           '/api/ordencompradetalle',   
             devolucion:             '/api/devoluciones',
             ventas:                 '/api/ventas',
             movimientos:            '/api/movimientos',
@@ -86,7 +82,6 @@ export class Server{
         this.app.use(this.paths.auth,               require('../routes/auth'));
         this.app.use(this.paths.usuarios,           require('../routes/usuarios'));
         this.app.use(this.paths.b_p,                require('../routes/b_p'));
-        this.app.use(this.paths.servicio,           require('../routes/servicio'));
         this.app.use(this.paths.pedido,             require('../routes/pedido'));
         this.app.use(this.paths.pedidodetalle,      require('../routes/pedidodetalle'));
         this.app.use(this.paths.cfdi,               require('../routes/cfdi'));
@@ -98,14 +93,11 @@ export class Server{
         this.app.use(this.paths.localidad,          require('../routes/localidad'));
         this.app.use(this.paths.codigop,            require('../routes/codigop'));
         this.app.use(this.paths.colonia,            require('../routes/colonia'));
-        this.app.use(this.paths.inventario,         require('../routes/inventario'));
         this.app.use(this.paths.factura,            require('../routes/factura'));
-        this.app.use(this.paths.producto,           require('../routes/producto'));
         this.app.use(this.paths.ubicacion,          require('../routes/ubicacion'));
         this.app.use(this.paths.auditoria,          require('../routes/auditoria'));
         this.app.use(this.paths.orden,              require('../routes/ordencompra'));
         this.app.use(this.paths.ordendetalle,       require('../routes/ordencompradetalle'));
-        this.app.use(this.paths.inventario_servicios,      require('../routes/inventario_servicios'));
         this.app.use(this.paths.devolucion,         require('../routes/devoluciones'));
         this.app.use(this.paths.ventas,             require('../routes/ventas'));
         this.app.use(this.paths.movimientos,        require('../routes/movimiento_inv'));

@@ -40,18 +40,6 @@ export class validacionesdb{
         }
     }
       
-    // existeservicio = async( id:any ) => {       
-    //     const existeservicio = await Servicio.findOne( {'descripcion':id}) 
-    //     if( existeservicio){
-    //         throw new Error(`ya existe el servicio${id}`);
-    //     }
-    // }
-    // existeproducto = async( id:any ) => { 
-    //     const existeproducto = await producto.findOne({'descripcion':id.toUpperCase()}) 
-    //     if( existeproducto){
-    //         throw new Error(`ya existe el producto${id}`);
-    //     }
-    // }
     existeubicacion = async( id:any ) => { 
         const existeubicacion = await ubicacion.findOne({'descripcion':id.toUpperCase()}) 
         if( existeubicacion){
@@ -59,37 +47,15 @@ export class validacionesdb{
         }
     }
 
-    // existeinventario= async (id:any ) =>{
-    //     const inv= await inventario.findById(id);
-    //     console.log(inv['cantidad']);
-    //              if(inv['cantidad']>0){
-    //         throw new Error(`Inventario con existencias `);
-    //     }
-        
-    // }
     existeinventarioubi= async (id:any ) =>{
         this.id_ubicacion=id
         }
     
-    // existeinventarioprod= async (id:any) =>{
-    //         const existeinv = await inventario.findOne({$and : [{'id_producto':id}, {'ubicacion':this.id_ubicacion}]});
-    //         if(existeinv){
-    //             throw new Error(`El producto: ${id} ya existe  `);
-                
-    //         }
-    //     }
 
     existeservicioubi= async (id:any ) =>{
             this.ubicacion=id
             }
         
-    // existeinventarioservicio= async (id:any) =>{
-    //             const existeinv = await inventario_servicios.findOne({$and : [{'id_servicio':id}, {'ubicacion':this.ubicacion}]});  
-    //             if(existeinv){
-    //                 throw new Error(`El servicio ya existe  `);
-  
-    //             }
-    //         }
     esproductodevuelto= async (id:any) =>{
         console.log(id);
         
