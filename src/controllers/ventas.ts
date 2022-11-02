@@ -4,7 +4,7 @@ const Pedidodetalle = require("../models/pedidodetalle");
 export class reporteventas{
     obtenerpedidos = async ( req:Request,res:Response) => {
         const { id } = req.params;
-        console.log(id);
+        console.log( id,req.query.fin);
         try {
     
             const pedidos = await Pedido.aggregate([ {$match: { "$expr": {
