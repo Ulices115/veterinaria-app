@@ -56,18 +56,16 @@ export class devolucion{
     }   
     obtenerdevolucion= async( req:any,res:Response) => {
         const { id } = req.params;
+        const fin = String(req.query.fin)
+        console.log(fin);
+        
         if(id.charAt('P')=='P'){
              const devolucion = await Devoluciones.find({activo:true,"id_pedido":id.toUpperCase()});
              res.json( devolucion);
         }else{
-        const devolucion = await Devoluciones.aggregate([ {$match: { "$expr": {
-            "$and": [
-              { $eq: [{ $year: "$fecha" }, { $year: new Date(id) }]},
-              { $eq: [{ $month: "$fecha" }, { $month: new Date(id) }]},
-              { $eq: [{ $dayOfMonth: "$fecha" }, { $dayOfMonth: new Date(id) }]},
-            ]
-          }}}]
-        );
+        const devolucion = await Devoluciones.aggregate([ {$match: {fecha: 
+            { $gte: new Date(id), $lte: new Date(fin)}}}
+        ]);
         res.json( devolucion);
         }
         
