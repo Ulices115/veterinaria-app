@@ -44,7 +44,7 @@ export class producto_servicio{
     obtenerprod_serv = async(req:any,res:Response ) => {
         const { id } = req.params;
         var {tipo} = req.query
-        console.log(tipo);
+        console.log('tipo',tipo);
         const producto_servicio = await Productos_servicios.find({activo:true,$and:[{'descripcion': {'$regex':`^${id}`,'$options': 'i'}},{'tipo':tipo}]}).limit(10);
         res.json( producto_servicio );
         console.log('Registro encontrado');

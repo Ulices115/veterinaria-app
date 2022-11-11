@@ -49,7 +49,6 @@ export class Inventario{
     obtenerinventario = async(req:any,res:Response ) => {
         var { id} = req.params;
         var {ubi,tipo} = req.query  
-        console.log('tipo',tipo);
         if(tipo!==''){
             const inventario = await inventario_general.aggregate([
                 { "$lookup": {
@@ -67,7 +66,7 @@ export class Inventario{
                     as: "productos_servicios"
                   }},
                   { $unwind: "$productos_servicios"}, 
-                  { $match: {$and:[{'tipo':tipo},{'productos_servicios.descripcion': {'$regex': `^${id}`,'$options': 'i'}}]}},
+                  { $match: {$and:[{'tipo':tipo},{$or:[{'productos_servicios.descripcion': {'$regex': `^${id}`,'$options': 'i'}},{'productos_servicios.codigo_barra': {'$regex': `^${id}`,'$options': 'i'}}]}]}},
                   { $match: {activo:true}},
             ]).sort({'productos_servicios.descripcion':1}).limit(10);
     
@@ -91,7 +90,8 @@ export class Inventario{
                     as: "productos_servicios"
                   }},
                   { $unwind: "$productos_servicios"}, 
-                  { $match: {'productos_servicios.descripcion': {'$regex': `^${id}`,'$options': 'i'}}},
+                  { $match: {$or:[{'productos_servicios.descripcion': {'$regex': `^${id}`,'$options': 'i'}},{'productos_servicios.codigo_barra': {'$regex': `^${id}`,'$options': 'i'}}]}},
+                //   { $match: {'productos_servicios.codigo_barra': {'$regex': `^${id}`,'$options': 'i'}}},
                   { $match: {activo:true}},
             ]).sort({'productos_servicios.descripcion':1}).limit(10);
     

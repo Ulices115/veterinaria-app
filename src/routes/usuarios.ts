@@ -24,7 +24,7 @@ router.get('/:id', [
 router.put('/:id', [
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom(validaciones.existeUsuarioPorId),
-    check('rol').custom( validaciones.esRoleValido ),
+    // check('rol').custom( validaciones.esRoleValido ),
     validarcampos.validarCampos
 ], usuarios.usuariosPut);
 
@@ -33,7 +33,7 @@ router.post('/', [
     check('password', 'Password debe de ser de mas de 6 letras').isLength({min:6}),
     check('correo', 'Correo incorrecto').isEmail(),
     check('correo').custom( validaciones.existeEmail ),
-    check('rol', 'no es un roll  permitido').isIn(['ADMIN_ROLE','USER_ROLE']),
+    // check('rol', 'no es un roll  permitido').isIn(['ADMIN_ROLE','USER_ROLE']),
     // check('rol').custom( validaciones.esRoleValido ),    
     validarcampos.validarCampos
 ], usuarios.usuariosPost);

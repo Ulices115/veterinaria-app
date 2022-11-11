@@ -17,7 +17,7 @@ const Producto_servicioSchema = new Schema<Iproducto_servicio>({
      
     },
     codigo_barra: {
-        type: Number,
+        type: String,
         // required: [true, 'codigo barra obligatorio'],
      
     },

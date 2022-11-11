@@ -14,8 +14,7 @@ export class Server{
          pais:string; estado:string; regimen:string; clave:string; municipio:string; localidad:string; codigop:string;
          colonia:string; factura:string;  ubicacion:string; auditoria:string;
          orden:string; ordendetalle:string; devolucion:string; ventas:string; movimientos:string;
-         inventario_general:string; producto_servicio:string;
-    };
+         inventario_general:string; producto_servicio:string; transaccion:string; utransaccion:string   };
     constructor(){
         this.app = express();
         this.port = process.env.PORT;
@@ -43,7 +42,9 @@ export class Server{
             ventas:                 '/api/ventas',
             movimientos:            '/api/movimientos',
             inventario_general:     '/api/inventario_general',
-            producto_servicio:      '/api/producto_servicio'
+            producto_servicio:      '/api/producto_servicio',
+            transaccion:            '/api/transaccion',
+            utransaccion:           '/api/Utransaccion'
         }
         
         //Cnectar a base de datos
@@ -102,7 +103,9 @@ export class Server{
         this.app.use(this.paths.ventas,             require('../routes/ventas'));
         this.app.use(this.paths.movimientos,        require('../routes/movimiento_inv'));
         this.app.use(this.paths.inventario_general,        require('../routes/inventario_general'));
-        this.app.use(this.paths.producto_servicio,           require('../routes/productos_servicios'));
+        this.app.use(this.paths.producto_servicio,         require('../routes/productos_servicios'));
+        this.app.use(this.paths.transaccion,           require('../routes/transacciones'));
+        this.app.use(this.paths.utransaccion,           require('../routes/usuario_transaccion'));
            this.app.get('*',(req:any,res:any)=>{
             res.sendFile(path.resolve('src/public/index.html'))
         })

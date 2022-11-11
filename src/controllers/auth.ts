@@ -50,7 +50,7 @@ export class login{
     }
     
  revalidarToken = async(req:any, res:Response)=>{
-    
+  
         const token = await generarJWT( req.usuario.id )
         const usuario = req.usuario;
         return res.status(200).json({usuario,token})

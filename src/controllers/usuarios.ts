@@ -23,7 +23,7 @@ export class usuarios{
         console.log(id);
         
         // const usuario = await Usuario.findById(id).populate('nombre');
-        const usuario = await Usuario.find({$or:[{'ubicacion':id},{'nombre':id}]})
+        const usuario = await Usuario.find({$or:[{'ubicacion':id},{ "nombre": {'$regex': id,'$options': 'i'}}]})
         res.json( usuario );
         console.log('Registro encontrado');
     }
@@ -47,10 +47,10 @@ export class usuarios{
     
     usuariosPost = async (req:any,res:Response)=>{
     
-        const {nombre, correo, password, rol,ubicacion} = req.body;
-    
-        const usuario = new Usuario({nombre, correo, password, rol,ubicacion});
-    
+        const {nombre, correo, password,ubicacion} = req.body;
+        // const ubicacion = req.body.ubicacion.toUpperCase();
+        const usuario = new Usuario({nombre, correo, password,ubicacion});
+        
         const salt = bcryptjs.genSaltSync();
     
         usuario.password = bcryptjs.hashSync(password, salt);

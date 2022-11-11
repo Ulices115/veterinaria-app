@@ -34,7 +34,6 @@ export class devolucion{
         await devolucion.save();
         console.log('Registro agregado');
         res.status(200).json(data);
-
         var {ubi} = req.query
             const inventarios = await inventario_general.find({$and:[{'id_inventario':req.body.referencia},{ubicacion:ubi}]})
             const nuevaexistencias=inventarios[0]['cantidad']+ req.body.cantidad_devuelta
@@ -60,7 +59,19 @@ export class devolucion{
         console.log(fin);
         
         if(id.charAt('P')=='P'){
-             const devolucion = await Devoluciones.find({activo:true,"id_pedido":id.toUpperCase()});
+            const fecha=new Date()
+            //  const devolucion = await Devoluciones.find({activo:true,"id_pedido":id.toUpperCase()});
+            const devolucion = await Devoluciones.aggregate([
+                { $match: {activo:true}},
+                { $match: {'id_pedido':id.toUpperCase()}},
+                {$match: { "$expr": {
+                    "$and": [
+                      { $eq: [{ $year: "$fecha" }, { $year: new Date(fecha) }]},
+                      { $eq: [{ $month: "$fecha" }, { $month: new Date(fecha) }]},
+                      { $eq: [{ $dayOfMonth: "$fecha" }, { $dayOfMonth: new Date(fecha) }]},
+                    ]
+                  }}}
+            ]);
              res.json( devolucion);
         }else{
         const devolucion = await Devoluciones.aggregate([ {$match: {fecha: 
