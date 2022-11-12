@@ -26,7 +26,7 @@ const PedidoSchema = new Schema<Ipedido>({
     },
     status_log:{
         type:String,
-        default:'pendiente',
+        default:'carrito de compras',
     },
     status_f:{
         type:String,

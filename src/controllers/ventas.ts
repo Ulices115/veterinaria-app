@@ -5,7 +5,9 @@ export class reporteventas{
     obtenerpedidos = async ( req:Request,res:Response) => {
         const { id } = req.params;
         const fin = String(req.query.fin)
+        console.log(id);
         console.log(fin);
+        
         
         try {
 

@@ -82,7 +82,9 @@ export class pedido{
     obtenerpedido = async(req:Request,res:Response ) => {
         const { id } = req.params;
         var {tipo} = req.query
-        console.log(tipo);
+        const f_ini = String(req.query.f_ini)
+        const f_fin = String(req.query.f_fin)
+        // modulo facturar
         if(tipo=='factura'){
             const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'no pagado'}]}).limit(10);
             res.json( pedido);
@@ -91,34 +93,50 @@ export class pedido{
             console.log('tipo factura');
             
        }
+        // funciones de busquedaseleecion
         if(tipo==''){
              const pedido = await Pedido.find({cancelado:false,'id_pedido':id});
              res.json( pedido);
              console.log(pedido);
              
              console.log('sin tipo');
-             
-        }if(tipo=='filtro'){
-            //  const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{$or:[{status_f:'no pagado'},{status_f:'pagado'}]}]}).limit(10);
-             const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'no pagado'},{status_log:'pendiente'}]}).limit(10);
+        // edicion y cancelacion de pedido  
+       }if(tipo=='filtro'){
+            //const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{$or:[{status_f:'no pagado'},{status_f:'pagado'}]}]}).limit(10);
+             const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'no pagado'},{status_log:'carrito de compras'}]}).limit(10);
             res.json( pedido);
             console.log(pedido);
             
             console.log('sin tipo');
-            
+            // modulo de pedidos por procesar
        }if(tipo=='lista'){
+        // {$match:{cancelado:false,$nor:[{$and:[{status_f:'pagado'},{status_log:'procesado'}]}],$or:[{'status_f':id},{'status_log':id}]}},
+        // const pedido = await Pedido.find({cancelado:false,$nor:[{$and:[{status_f:'pagado'},{status_log:'procesado'}]}],$or:[{'status_f':id},{'status_log':id}]});
+        const pedido= await Pedido.aggregate([{$match:{cancelado:false,$nor:[{$and:[{status_f:'pagado'},{status_log:'procesado'}]}],$or:[{'status_f':id},{'status_log':id}]}},
+            {$match: {fecha: 
+            { $gte: new Date(f_ini), $lte: new Date(f_fin)}}},
             
-            const pedido = await Pedido.find({cancelado:false,$nor:[{$and:[{status_f:'pagado'},{$or:[{status_log:'entregado'},{status_log:'realizado'}]}]}],$or:[{'status_f':id},{'status_log':id}]});
+            { "$lookup": {
+                from: "b_ps",
+                foreignField: "id_b_p",
+                localField: "id_b_p",
+                as: "socio"
+              }},
+              { $unwind: "$socio"}
+        ]);
+
              res.json( pedido);
-             console.log('lista');
+ 
+            //modulo de devoluciones  
         }if(tipo=='devolucion'){
-            const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'pagado'},{$or:[{status_log:'entregado'},{status_log:'realizado'}]}]}).limit(10);
+            const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'pagado'},{status_log:'procesado'}]}).limit(10);
             res.json( pedido);
             console.log(pedido);
             
             console.log('en devolucion');
+            // modulo de descarga de factura
         }if(tipo=='pagado'){
-            const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_log:'entregado'}]}).limit(10);
+            const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_log:'procesado'}]}).limit(10);
             res.json( pedido);
             console.log(pedido);
             
