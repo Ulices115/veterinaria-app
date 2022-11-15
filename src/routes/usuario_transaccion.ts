@@ -36,7 +36,7 @@ router.delete('/:id', [
 ], transaccion.borrarUtransaccion)
 router.put('/:id', [
     // validarjwt.validarJWT,
-    check( 'id_pedido', 'El nombre es obligatorio').not().isEmpty(),
+    check( 'transaccion', 'la transaccion es obligatorio es obligatorio').not().isEmpty(),
     validarcampos.validarCampos
 ], transaccion.actualizarUtransaccion)
 

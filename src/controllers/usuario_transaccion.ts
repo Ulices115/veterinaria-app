@@ -48,10 +48,6 @@ export class transacciones{
     actualizarUtransaccion = async( req:any, res:Response ) => {
         const { id } = req.params;
         const { _id, ...data } = req.body;
-    
-        data.transaccion=data.transaccion.toUpperCase();
-        
-    
         const trans = await Usuario_Transaccion.findByIdAndUpdate( id , data, {new:true});
     
         if(trans){
