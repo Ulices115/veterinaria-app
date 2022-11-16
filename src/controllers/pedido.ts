@@ -86,7 +86,16 @@ export class pedido{
         const f_fin = String(req.query.f_fin)
         // modulo facturar
         if(tipo=='factura'){
-            const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'no pagado'}]}).limit(10);
+            // const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'no pagado'}]}).limit(10);
+            const pedido = await Pedido.aggregate([{$match:{cancelado:false,$and:[{'id_pedido': {'$regex': `${id}`,'$options': 'i'}}]}}, 
+            { "$lookup": {
+                from: "b_ps",
+                foreignField: "id_b_p",
+                localField: "id_b_p",
+                as: "socio"
+              }},
+              { $unwind: "$socio"}
+        ]);
             res.json( pedido);
             console.log(pedido);
             
@@ -110,7 +119,6 @@ export class pedido{
             console.log('sin tipo');
             // modulo de pedidos por procesar
        }if(tipo=='lista'){
-        // {$match:{cancelado:false,$nor:[{$and:[{status_f:'pagado'},{status_log:'procesado'}]}],$or:[{'status_f':id},{'status_log':id}]}},
         // const pedido = await Pedido.find({cancelado:false,$nor:[{$and:[{status_f:'pagado'},{status_log:'procesado'}]}],$or:[{'status_f':id},{'status_log':id}]});
         const pedido= await Pedido.aggregate([{$match:{cancelado:false,$nor:[{$and:[{status_f:'pagado'},{status_log:'procesado'}]}],$or:[{'status_f':id},{'status_log':id}]}},
             {$match: {fecha: 

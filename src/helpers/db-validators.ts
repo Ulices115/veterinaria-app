@@ -83,7 +83,7 @@ export class validacionesdb{
     }
     existepedidob_p = async( id:any ) => {
         const b_ps = await b_p.findById( id );
-        const pedidos = await pedido.find({$and:[{'id_b_p':b_ps['id_b_p']},{status_log:'pendiente'}]})
+        const pedidos = await pedido.find({$and:[{'id_b_p':b_ps['id_b_p']},{status_log:'carrito de compras'}]})
         console.log('pedidos',pedidos);
         
         if( pedidos.length>0 ){

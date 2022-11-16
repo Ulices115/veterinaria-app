@@ -23,7 +23,7 @@ export class usuarios{
         console.log(id);
         
         // const usuario = await Usuario.findById(id).populate('nombre');
-        const usuario = await Usuario.find({$or:[{'ubicacion':id},{ "nombre": {'$regex': id,'$options': 'i'}}]})
+        const usuario = await Usuario.find({estado:true,$or:[{'ubicacion':id},{ "nombre": {'$regex': id,'$options': 'i'}}]})
         res.json( usuario );
         console.log('Registro encontrado');
     }
@@ -70,12 +70,13 @@ export class usuarios{
     
                 const usuario = await Usuario.findByIdAndUpdate( id, { estado: false } );
                 const usuarioAutenticado = req.usuario;
-        
+                console.log(req.usuario);
+                
                 res.json({
                     usuario,
                     usuarioAutenticado
                 })
-                console.log('El usuario: '+ usuario.nombre +' fue eliminado/inhabilitado '+ 'por '+ usuarioAutenticado.nombre);
+                // console.log('El usuario: '+ usuario.nombre +' fue eliminado/inhabilitado '+ 'por '+ usuarioAutenticado.nombre);
         } else{
             res.json({
                        msg:'El usuario no existe o ya fue eliminado'
