@@ -26,9 +26,13 @@ const UsuarioSchema = new Schema<IUser>({
         type: String,
         required: [true, 'La contraseña es obligatoria']
     },
-    imagen: {
-        type: String,
+    numero_cel: {
+        type: Number,
+        required: [true, 'El numero es obligatoria']
     },
+    // imagen: {
+    //     type: String,
+    // },
     // rol: {
     //     type: String,
     //     required:true,
@@ -43,10 +47,10 @@ const UsuarioSchema = new Schema<IUser>({
         type:String,
         required:true
     },
-    google: {
-        img: Boolean,
-        default: false
-    }
+    // google: {
+    //     img: Boolean,
+    //     default: false
+    // }
 })
 
 UsuarioSchema.methods.toJSON = function(){

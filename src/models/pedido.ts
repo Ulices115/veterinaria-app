@@ -33,6 +33,10 @@ const PedidoSchema = new Schema<Ipedido>({
         default:'no pagado',
         
     },
+    facturado: {
+        type: Boolean,
+        default:false
+    },
     cancelado: {
         type: Boolean,
         default:false

@@ -47,9 +47,9 @@ export class usuarios{
     
     usuariosPost = async (req:any,res:Response)=>{
     
-        const {nombre, correo, password,ubicacion} = req.body;
+        const {nombre, correo, password,numero_cel,ubicacion} = req.body;
         // const ubicacion = req.body.ubicacion.toUpperCase();
-        const usuario = new Usuario({nombre, correo, password,ubicacion});
+        const usuario = new Usuario({nombre, correo,numero_cel ,password,ubicacion});
         
         const salt = bcryptjs.genSaltSync();
     

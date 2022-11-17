@@ -84,10 +84,13 @@ export class pedido{
         var {tipo} = req.query
         const f_ini = String(req.query.f_ini)
         const f_fin = String(req.query.f_fin)
+        const seleccion2= req.query.seleccion2
         // modulo facturar
+        console.log(tipo,seleccion2);
+        
         if(tipo=='factura'){
             // const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'no pagado'}]}).limit(10);
-            const pedido = await Pedido.aggregate([{$match:{cancelado:false,$and:[{'id_pedido': {'$regex': `${id}`,'$options': 'i'}}]}}, 
+            const pedido = await Pedido.aggregate([{$match:{cancelado:false,$and:[{'id_pedido': {'$regex': `${id}`,'$options': 'i'}},{facturado:false}]}}, 
             { "$lookup": {
                 from: "b_ps",
                 foreignField: "id_b_p",
@@ -95,7 +98,7 @@ export class pedido{
                 as: "socio"
               }},
               { $unwind: "$socio"}
-        ]);
+        ]).limit(10).sort({id_pedido:1});
             res.json( pedido);
             console.log(pedido);
             
@@ -111,16 +114,14 @@ export class pedido{
              console.log('sin tipo');
         // edicion y cancelacion de pedido  
        }if(tipo=='filtro'){
-            //const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{$or:[{status_f:'no pagado'},{status_f:'pagado'}]}]}).limit(10);
-             const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'no pagado'},{status_log:'carrito de compras'}]}).limit(10);
+             const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'no pagado'},{status_log:'carrito de compras'}]}).limit(10).sort({id_pedido:1});
             res.json( pedido);
             console.log(pedido);
             
             console.log('sin tipo');
             // modulo de pedidos por procesar
-       }if(tipo=='lista'){
-        // const pedido = await Pedido.find({cancelado:false,$nor:[{$and:[{status_f:'pagado'},{status_log:'procesado'}]}],$or:[{'status_f':id},{'status_log':id}]});
-        const pedido= await Pedido.aggregate([{$match:{cancelado:false,$nor:[{$and:[{status_f:'pagado'},{status_log:'procesado'}]}],$or:[{'status_f':id},{'status_log':id}]}},
+       }if(tipo=='tratamiento'){
+        const pedido= await Pedido.aggregate([{$match:{cancelado:false,facturado:false,$and:[{'status_f':seleccion2},{'status_log':id}]}},
             {$match: {fecha: 
             { $gte: new Date(f_ini), $lte: new Date(f_fin)}}},
             
@@ -137,18 +138,26 @@ export class pedido{
  
             //modulo de devoluciones  
         }if(tipo=='devolucion'){
-            const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'pagado'},{status_log:'procesado'}]}).limit(10);
+            const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'pagado'},{status_log:'procesado'}]}).limit(10).sort({id_pedido:1});
             res.json( pedido);
             console.log(pedido);
             
             console.log('en devolucion');
             // modulo de descarga de factura
-        }if(tipo=='pagado'){
-            const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_log:'procesado'}]}).limit(10);
+        }if(tipo=='facturado'){
+            const pedido = await Pedido.aggregate([{$match:{cancelado:false,$and:[{'id_pedido': {'$regex': `${id}`,'$options': 'i'}},{facturado:true}]}}, 
+            { "$lookup": {
+                from: "b_ps",
+                foreignField: "id_b_p",
+                localField: "id_b_p",
+                as: "socio"
+              }},
+              { $unwind: "$socio"}
+        ]).limit(10).sort({id_pedido:1});
             res.json( pedido);
             console.log(pedido);
             
-            console.log('en devolucion');
+            console.log('en facturado');
         }
       
         console.log('Registro encontrado');
