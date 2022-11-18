@@ -66,8 +66,8 @@ export class transacciones{
                 res.status(404).json({ msg: 'No existe el servicio' })
             }
            
-            // await Producto.findOneAndRemove({ _id: req.params.id })
-            await Usuario_Transaccion.findByIdAndUpdate({_id:req.params.id},{activo:false})
+            await Usuario_Transaccion.findOneAndRemove({ _id: req.params.id })
+            // await Usuario_Transaccion.findByIdAndUpdate({_id:req.params.id},{activo:false})
             res.json({ msg: 'Utransaccion eliminado con exito' });
             
         } catch (error) {
