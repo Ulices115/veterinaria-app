@@ -48,30 +48,57 @@ export class Inventario{
     }
     obtenerinventario = async(req:any,res:Response ) => {
         var { id} = req.params;
-        var {ubi,tipo} = req.query  
+        var {ubi,tipo,consulta} = req.query   
+        console.log(consulta);
+        
         if(tipo!==''){
-            const inventario = await inventario_general.aggregate([
-                { "$lookup": {
-                    from: "ubicacions",
-                    foreignField: "id_ubicacion",
-                    localField: "ubicacion",
-                    as: "ubicacion"
-                  }},
-                  { $unwind: "$ubicacion"},
-                { $match: {'ubicacion.id_ubicacion': ubi}},
-                { "$lookup": {
-                    from: "productos_servicios",
-                    foreignField: "id_prod_serv",
-                    localField: "id_prod_serv",
-                    as: "productos_servicios"
-                  }},
-                  { $unwind: "$productos_servicios"}, 
-                  { $match: {$and:[{'tipo':tipo},{$or:[{'productos_servicios.descripcion': {'$regex': `^${id}`,'$options': 'i'}},{'productos_servicios.codigo_barra': {'$regex': `^${id}`,'$options': 'i'}}]}]}},
-                  { $match: {activo:true}},
-            ]).sort({'productos_servicios.descripcion':1}).limit(10);
-    
-            res.json( inventario );
-            console.log('Registro encontrado');  
+            if(consulta!==''){
+                const inventario = await inventario_general.aggregate([
+                    { "$lookup": {
+                        from: "ubicacions",
+                        foreignField: "id_ubicacion",
+                        localField: "ubicacion",
+                        as: "ubicacion"
+                      }},
+                      { $unwind: "$ubicacion"},
+                    { "$lookup": {
+                        from: "productos_servicios",
+                        foreignField: "id_prod_serv",
+                        localField: "id_prod_serv",
+                        as: "productos_servicios"
+                      }},
+                      { $unwind: "$productos_servicios"}, 
+                      { $match: {$and:[{'tipo':tipo},{$or:[{'productos_servicios.descripcion': {'$regex': `^${id}`,'$options': 'i'}},{'productos_servicios.codigo_barra': {'$regex': `^${id}`,'$options': 'i'}}]}]}},
+                      { $match: {activo:true}},
+                ]).sort({'productos_servicios.descripcion':1}).limit(10);
+        
+                res.json( inventario );
+                console.log('Registro encontrados en consulta');  
+            }else{
+                const inventario = await inventario_general.aggregate([
+                    { "$lookup": {
+                        from: "ubicacions",
+                        foreignField: "id_ubicacion",
+                        localField: "ubicacion",
+                        as: "ubicacion"
+                      }},
+                      { $unwind: "$ubicacion"},
+                    { $match: {'ubicacion.id_ubicacion': ubi}},
+                    { "$lookup": {
+                        from: "productos_servicios",
+                        foreignField: "id_prod_serv",
+                        localField: "id_prod_serv",
+                        as: "productos_servicios"
+                      }},
+                      { $unwind: "$productos_servicios"}, 
+                      { $match: {$and:[{'tipo':tipo},{$or:[{'productos_servicios.descripcion': {'$regex': `^${id}`,'$options': 'i'}},{'productos_servicios.codigo_barra': {'$regex': `^${id}`,'$options': 'i'}}]}]}},
+                      { $match: {activo:true}},
+                ]).sort({'productos_servicios.descripcion':1}).limit(10);
+        
+                res.json( inventario );
+                console.log('Registro encontrado baja-ajuste-orden');  
+            }
+           
         }
         if(tipo==''){
             const inventario = await inventario_general.aggregate([
@@ -96,7 +123,7 @@ export class Inventario{
             ]).sort({'productos_servicios.descripcion':1}).limit(10);
     
             res.json( inventario );
-            console.log('Registro encontrado');  
+            console.log('Registro encontrado pedido');  
         }
 
     }

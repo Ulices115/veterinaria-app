@@ -25,6 +25,7 @@ export class usuarios{
         // const usuario = await Usuario.findById(id).populate('nombre');
         const usuario = await Usuario.find({estado:true,$or:[{'ubicacion':id},{ "nombre": {'$regex': `^${id}`,'$options': 'i'}}]})
         res.json( usuario );
+     
         console.log('Registro encontrado');
     }
     
