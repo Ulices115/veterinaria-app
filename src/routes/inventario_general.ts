@@ -12,7 +12,6 @@ router.post('/',[
     check('ubicacion').custom(validaciones. existeinventarioubi),
     check('tipo').custom(validaciones.existetipo),
     check('id_prod_serv').custom(validaciones.existeinventarioprod_serv),
-    // check('inventarios').custom(validaciones.existeinventarioprod),
     validarcampos.validarCampos,
 ],inventario.crearinventario)
 

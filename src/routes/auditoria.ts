@@ -8,7 +8,7 @@ const router = Router();
 router.post('/', [
     // validarJWT,
     check('usuario','El nombre es obligatorio').not().isEmpty(),
-    //check('id').custom(existeb_pPorId),
+    //check('id').custom(),
     validarcampos.validarCampos
 ], auditoria.auditorias)
 router.get('/',[

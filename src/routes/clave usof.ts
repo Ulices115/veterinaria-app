@@ -16,7 +16,7 @@ router.get('/',[
 router.post('/', [
     // validarJWT,
     check('id_cfdi','El nombre es obligatorio').not().isEmpty(),
-    //check('id').custom(existeb_pPorId),
+    //check('id').custom(),
     validarcampos.validarCampos
 ], clave.crearclave)
 

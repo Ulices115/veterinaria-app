@@ -11,7 +11,6 @@ const router = Router();
 router.post('/', [
     // validarJWT,
     check('producto','El nombre es obligatorio').not().isEmpty(),
-    //check('id').custom(existeb_pPorId),
     validarcampos.validarCampos
 ], ordenDetalle.crearordenD)
 
@@ -23,20 +22,13 @@ router.get('/',[
 
 router.get('/:id', [
     // check('id','No es un id de mongo valido').isMongoId(),
-    // check('id').custom(existeb_pPorId), 
     validarcampos.validarCampos
 ], ordenDetalle.obtenerordenD )
 
 router.delete('/:id', [
     // validarJWT,
     // check('id','No es un id de mongo valido').isMongoId(),
-    // check('id').custom(existepedidoPorId),
     validarcampos.validarCampos
 ], ordenDetalle.borrarordenD)
-// router.get('/:id', [
-//     check('id','No es un id de mongo valido').isMongoId(),
-//     // check('id').custom(existeb_pPorId), 
-//     validarCampos
-// ], obtenerdetalle )
 
 module.exports = router;

@@ -24,14 +24,14 @@ router.get('/',[
 
 router.get('/:id', [
     // check('id','No es un id de mongo valido').isMongoId(),
-    // check('id').custom(existeb_pPorId), 
+    // check('id').custom(), 
     validarcampos.validarCampos
 ], orden.obtenerorden)
 
 router.delete('/:id', [
     // validarjwt.validarJWT,
     check('id','No es un id de mongo valido').isMongoId(),
-    // check('id').custom(existepedidoPorId),
+    // check('id').custom(),
     validarcampos.validarCampos
 ], orden.borrarorden)
 router.put('/:id', [

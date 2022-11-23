@@ -121,19 +121,37 @@ export class pedido{
             console.log('sin tipo');
             // modulo de pedidos por procesar
        }if(tipo=='tratamiento'){
-        const pedido= await Pedido.aggregate([{$match:{cancelado:false,$and:[{'status_f':seleccion2},{'status_log':id}]}},
-            {$match: {fecha: 
-            { $gte: new Date(f_ini), $lte: new Date(f_fin)}}},
-            { "$lookup": {
-                from: "b_ps",
-                foreignField: "id_b_p",
-                localField: "id_b_p",
-                as: "socio"
-              }},
-              { $unwind: "$socio"}
-        ]);
-
-             res.json( pedido);
+            if(id=='Todos'){
+                const pedido= await Pedido.aggregate([{$match:{cancelado:false}},
+                {$match: {fecha: 
+                { $gte: new Date(f_ini), $lte: new Date(f_fin)}}},
+                { "$lookup": {
+                    from: "b_ps",
+                    foreignField: "id_b_p",
+                    localField: "id_b_p",
+                    as: "socio"
+                  }},
+                  { $unwind: "$socio"},
+       
+            ]);
+            
+                 res.json( pedido);
+            }else{
+                const pedido= await Pedido.aggregate([{$match:{cancelado:false,$and:[{'status_f':seleccion2},{'status_log':id}]}},
+                {$match: {fecha: 
+                { $gte: new Date(f_ini), $lte: new Date(f_fin)}}},
+                { "$lookup": {
+                    from: "b_ps",
+                    foreignField: "id_b_p",
+                    localField: "id_b_p",
+                    as: "socio"
+                  }},
+                  { $unwind: "$socio"},
+       
+            ]);
+            
+                 res.json( pedido);
+            }
  
             //modulo de devoluciones  
         }if(tipo=='devolucion'){

@@ -8,7 +8,7 @@ const router = Router();
 router.post('/', [
     // validarJWT,
     check('id_factura','El nombre es obligatorio').not().isEmpty(),
-    //check('id').custom(existeb_pPorId),
+    //check('id').custom(),
     validarcampos.validarCampos
 ], factura.crearfactura)
 router.get('/',[
