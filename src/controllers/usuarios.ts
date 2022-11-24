@@ -20,30 +20,53 @@ export class usuarios{
     } //agregado
     usuarioget = async( req:any,res:Response ) => {
         const { id } = req.params;
-        console.log(id);
-        
-        // const usuario = await Usuario.findById(id).populate('nombre');
+        var {tipo} = req.query
+        console.log(tipo);
+        if(tipo=='activacion'){
+            const usuario = await Usuario.find({estado:false, "nombre": {'$regex': `^${id}`,'$options': 'i'}})
+            res.json( usuario );
+     
+            console.log('modulo activacion de usuario');
+        }else{
+             // const usuario = await Usuario.findById(id).populate('nombre');
         const usuario = await Usuario.find({estado:true,$or:[{'ubicacion':id},{ "nombre": {'$regex': `^${id}`,'$options': 'i'}}]})
         res.json( usuario );
      
-        console.log('Registro encontrado');
+        console.log('usuarios activos');
+        }
+       
     }
     
      usuariosPut = async(req:any,res:Response)=>{
         const { id } = req.params;
         const {_id, password, google, ...resto } = req.body;
-        
-        if( password ) {
-            const salt = bcryptjs.genSaltSync();
-            resto.password = bcryptjs.hashSync(password, salt);    
-        }
-    
+        var {tipo} = req.query
+        if(tipo=='activacion'){
+            
         const usuario = await Usuario.findByIdAndUpdate( id, resto );
             
         res.json({
             msg:'Actualizado',
             usuario
         })
+        console.log('actualizar estado');
+        
+        }if(tipo==''){
+        if( password ) {    
+            const salt = bcryptjs.genSaltSync();
+            resto.password = bcryptjs.hashSync(password, salt);    
+        }
+        
+        const usuario = await Usuario.findByIdAndUpdate( id, resto );
+            
+        res.json({
+            msg:'Actualizado',
+            usuario
+        })
+        console.log('actualizacion');
+        
+        }
+        
     }
     
     usuariosPost = async (req:any,res:Response)=>{

@@ -119,9 +119,43 @@ export class pedido{
             console.log(pedido);
             
             console.log('sin tipo');
-            // modulo de pedidos por procesar
+            // modulo de tratamiento de pedidos
        }if(tipo=='tratamiento'){
-            if(id=='Todos'){
+            if(id=='todos'&& seleccion2!=='todos'){
+                const pedido= await Pedido.aggregate([{$match:{cancelado:false,$and:[{'status_f':seleccion2}]}},
+                {$match: {fecha: 
+                { $gte: new Date(f_ini), $lte: new Date(f_fin)}}},
+                { "$lookup": {
+                    from: "b_ps",
+                    foreignField: "id_b_p",
+                    localField: "id_b_p",
+                    as: "socio"
+                  }},
+                  { $unwind: "$socio"},
+        
+                  ]);
+            
+                 res.json( pedido);
+                
+            }
+           if(id!=='todos'&& seleccion2=='todos'){
+               const pedido= await Pedido.aggregate([{$match:{cancelado:false,$and:[{'status_log':id}]}},
+                {$match: {fecha: 
+                { $gte: new Date(f_ini), $lte: new Date(f_fin)}}},
+                { "$lookup": {
+                    from: "b_ps",
+                    foreignField: "id_b_p",
+                    localField: "id_b_p",
+                    as: "socio"
+                  }},
+                  { $unwind: "$socio"},
+        
+                  ]);
+            
+                 res.json( pedido);
+                
+            }
+            if(id=='todos' && seleccion2=='todos'){
                 const pedido= await Pedido.aggregate([{$match:{cancelado:false}},
                 {$match: {fecha: 
                 { $gte: new Date(f_ini), $lte: new Date(f_fin)}}},
@@ -132,11 +166,13 @@ export class pedido{
                     as: "socio"
                   }},
                   { $unwind: "$socio"},
-       
-            ]);
+        
+                  ]);
             
                  res.json( pedido);
-            }else{
+                
+            }
+            if(id!=='todos'&& seleccion2!=='todos'){
                 const pedido= await Pedido.aggregate([{$match:{cancelado:false,$and:[{'status_f':seleccion2},{'status_log':id}]}},
                 {$match: {fecha: 
                 { $gte: new Date(f_ini), $lte: new Date(f_fin)}}},
@@ -147,12 +183,12 @@ export class pedido{
                     as: "socio"
                   }},
                   { $unwind: "$socio"},
-       
-            ]);
+        
+                  ]);
             
                  res.json( pedido);
             }
- 
+    
             //modulo de devoluciones  
         }if(tipo=='devolucion'){
             const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'pagado'},{status_log:'procesado'}]}).limit(10).sort({id_pedido:1});
