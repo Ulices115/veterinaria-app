@@ -85,9 +85,7 @@ export class pedido{
         const f_ini = String(req.query.f_ini)
         const f_fin = String(req.query.f_fin)
         const seleccion2= req.query.seleccion2
-        // modulo facturar
-        console.log(tipo,seleccion2);
-        
+        // modulo facturar        
         if(tipo=='factura'){
             // const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'no pagado'}]}).limit(10);
             const pedido = await Pedido.aggregate([{$match:{cancelado:false,$and:[{'id_pedido': {'$regex': `${id}`,'$options': 'i'}},{facturado:false}]}}, 
