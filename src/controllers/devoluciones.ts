@@ -56,7 +56,7 @@ export class devolucion{
     obtenerdevolucion= async( req:any,res:Response) => {
         const { id } = req.params;
         const fin = String(req.query.fin)
-        console.log(fin);
+        console.log('devolucion',id,fin);
         
         if(id.charAt('P')=='P'){
             const fecha=new Date()
@@ -77,6 +77,8 @@ export class devolucion{
         const devolucion = await Devoluciones.aggregate([ {$match: {fecha: 
             { $gte: new Date(id), $lte: new Date(fin)}}}
         ]);
+        console.log(devolucion);
+        
         res.json( devolucion);
         }
         

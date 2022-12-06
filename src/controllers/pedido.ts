@@ -103,16 +103,18 @@ export class pedido{
             console.log('tipo factura');
             
        }
-        // funciones de busquedaseleecion
-        // if(tipo==''){
-        //      const pedido = await Pedido.find({cancelado:false,'id_pedido':id});
-        //      res.json( pedido);
-        //      console.log(pedido);
-             
-        //      console.log('sin tipo');
-        // edicion y cancelacion de pedido  }
+        // modulo pedido edicion/baja    
         if(tipo=='filtro'){
-             const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'no pagado'},{status_log:'carrito de compras'}]}).limit(10).sort({id_pedido:1});
+            const pedido = await Pedido.aggregate([{$match:{cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'no pagado'},{status_log:'carrito de compras'}]}},
+            { "$lookup": {
+                from: "b_ps",
+                foreignField: "id_b_p",
+                localField: "id_b_p",
+                as: "socio"
+              }},
+              { $unwind: "$socio"},
+    
+              ]).limit(10).sort({id_pedido:1});
             res.json( pedido);
             console.log(pedido);
             
@@ -189,7 +191,17 @@ export class pedido{
     
             //modulo de devoluciones  
         }if(tipo=='devolucion'){
-            const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'pagado'},{status_log:'procesado'}]}).limit(10).sort({id_pedido:1});
+            // const pedido = await Pedido.find({cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'pagado'},{status_log:'procesado'}]}).limit(10).sort({id_pedido:1});
+            const pedido = await Pedido.aggregate([{$match:{cancelado:false,$and:[{'id_pedido': {'$regex': `^${id}`,'$options': 'i'}},{status_f:'pagado'},{status_log:'procesado'}]}},
+            { "$lookup": {
+                from: "b_ps",
+                foreignField: "id_b_p",
+                localField: "id_b_p",
+                as: "socio"
+              }},
+              { $unwind: "$socio"},
+    
+              ]).limit(10).sort({id_pedido:1});
             res.json( pedido);
             console.log(pedido);
             
