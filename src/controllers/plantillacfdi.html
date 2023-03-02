@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Factura</title>
+</head>      
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-10 ">
+                <h1>Factura</h1>
+            </div>
+            <div class="col-xs-2">
+                <img class="img img-responsive" src="https://wallpapercave.com/wp/wp8820542.jpg"  alt="Logotipo">
+            </div>
+        </div>
+        <hr>
+        <div class="row ">
+            <div class="col-xs-9 ">
+            <strong>Remitente</strong>
+                <br>
+                <h1 class="h6">${nombre_e}</h1>
+                <h1 class="h6">RFC:<b>${rfc_e}</b></h1>
+                <h1 class="h6">Lugar de expedición:<b>${lugar_exp}</b></h1>
+                 <br>
+            
+            </div>
+            <div class="col-xs-3 ">
+                <strong>Fecha de emisión</strong>
+                <br>
+                ${new Date().toLocaleDateString('es-mx', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) } <br>
+                <strong>Factura No.</strong>
+                <br>
+                ${String(folio).slice(1)}
+            </div>
+        </div>
+        <hr>
+        <div class="row" style="margin-bottom: 2rem;">
+            <div class="col-xs-6">
+            <strong>Cliente</strong>
+            <br>
+            <h1 class="h6">${nombre}</h1>
+            <h1 class="h6">RFC:<b>${rfc}</b></h1>
+            <h1 class="h6">Domicilio fiscal:<b>${cpostal}</b></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+            <table class="table table-condensed table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Clave unidad</th>
+                    <th>Descripción</th>
+                    <th>Valor unitario</th>
+                    <th>Cantidad</th>
+                    <th>Importe</th>
+                    <th>Descuento</th>
+                
+                </tr>
+            </thead>
+            <tbody>
+                ${tableRows}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6" class="text-right"><b>Subtotal</b></td>
+                    <td align="right">$ ${SubTotal}</td>
+                </tr>
+                <tr>
+                    <td colspan="6" class="text-right"><b>Descuento</b></td>
+                    <td align="right">$ ${descuentotal}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="6" class="text-right"><b>Impuestos</b></td>
+                    <td align="right">$ ${iva}</td>
+                </tr>
+                <tr>
+                    <td class="success" colspan="6" class="text-right">
+                        <h4><b>Total</b></h4>
+                    </td>
+                    <td>
+                        <h4 align="right">MXN ${total}</h4>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <p class="h5">Gracias por su compra</p>
+            </div>
+          <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br> <br>
+        </div>
+        <hr>
+        <div class="row">
+        <div class="col-xs-2">
+            <img " src="${qr}"/>
+             <br>
+        
+        </div>
+        <div class="col-xs-4 text-left ">
+            <h1 class="h6">Folio fiscal</h1>
+            <h1 class="h6"><b>${UUID}</b></h1>
+            <h1 class="h6">Rfc proveedor fiscal</h1>
+            <h1 class="h6"><b>${rfc_prov}</b></h1>
+            <h1 class="h6">Cadena original del timbre</h1>
+            <h6 style="font-size: 6pt;" ><small>
+            ${cadenao.slice(3,-356)}
+            ${cadenao.slice(60,-296)}
+            ${cadenao.slice(120,-236)}
+            ${cadenao.slice(180,-176)}
+            ${cadenao.slice(240,-116)}
+            ${cadenao.slice(300,-56)}
+            ${cadenao.slice(360)}
+      
+            </small></h6>
+          
+        </div>
+        <div class="col-xs-3">
+            <h1 class="h6">Número de certificado SAT</h1>
+            <h1 class="h6"><b>${Nocertificadosat}</b></h1>
+            <h1 class="h6">Sello digital del SAT</h1>
+            <h6 style="font-size: 6pt;"><small>
+            ${sellosat.slice(0,-302)}  
+            ${sellosat.slice(42,-260)}  
+            ${sellosat.slice(84,-218)}  
+            ${sellosat.slice(126,-176)}  
+            ${sellosat.slice(168,-134)}  
+            ${sellosat.slice(210,-92)}  
+            ${sellosat.slice(252,-50)}
+            ${sellosat.slice(294,-8)}
+            ${sellosat.slice(336)}  
+            </small></h6>
+            
+             <br>
+        
+    </div>
+     <div class="col-xs-3">
+            <h1 class="h6">Fecha y hora de certificación</h1>
+            <h1 class="h6"><b>${fechatimbrado}</b></h1>
+            <h1 class="h6">Sello digital del CFDI</h1>
+            <h6 style="font-size: 6pt;" ><small>
+            ${sellocfd.slice(0,-302)}  
+            ${sellocfd.slice(42,-260)}  
+            ${sellocfd.slice(84,-218)}  
+            ${sellocfd.slice(126,-176)}  
+            ${sellocfd.slice(168,-134)}  
+            ${sellocfd.slice(210,-92)}  
+            ${sellocfd.slice(252,-50)}
+            ${sellocfd.slice(294,-8)}
+            ${sellocfd.slice(336)}             
+            </small></h6>
+            
+            <br>         
+    </div>
+    </div>
+    </div>
+</body>
+
+</html>

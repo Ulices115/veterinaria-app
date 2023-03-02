@@ -1,0 +1,187 @@
+    <!DOCTYPE html>
+    <html lang="es">
+
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+            integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>FACTURA</title>
+        <style>
+            body{
+            background-image:
+                        linear-gradient(
+                        rgba(255,255,255,0.5),
+                        rgba(255,255,255,0.5)
+                        ),
+                        url("https://wallpapercave.com/wp/wp8820542.jpg");
+                        min-width: 34%;
+                        background-size: 100% 100%;
+                        background-attachment: fixed;
+            }
+            table{
+            background-color: rgba(255, 255, 255);
+        
+            
+                        
+        }
+        .caja{
+            background-color: rgb(12, 231, 42);
+    
+        }
+    </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-10 text-center font-size: 45px;">
+                    <h1 style="background-color: rgb(183, 183, 244);">FACTURA</h1>
+                </div>
+                <div class="col-xs-2">
+                    <img class="img img-responsive" src="../img/veterinaria.jpg"  alt="Logotipo">
+                </div>
+            </div>
+            <hr style="height:1px;border:none;color:rgb(0, 0, 0);background-color:rgb(0, 0, 0);">
+            <div class="row ">
+                <div class="col-xs-9 ">
+                <strong>Remitente</strong>
+                    <br>
+                    <h1 class="h6">${nombre_e}</h1>
+                    <h1 class="h6">RFC:<b>${rfc_e}</b></h1>
+                    <h1 class="h6">Lugar de expedición:<b>${lugar_exp}</b></h1>
+                    <br>
+                
+                </div>
+                <div class="col-xs-3 caja">
+                    <strong>Fecha de emisión</strong>
+                    <br>
+                    ${new Date().toLocaleDateString('es-mx', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) } <br>
+                    <strong>Factura No.</strong>
+                    <br>
+                    ${String(folio).slice(1)}
+                </div>
+            </div>
+            <hr style="height:1px;border:none;color:rgb(0, 0, 0);background-color:rgb(0, 0, 0);">
+            <div class="row" style="margin-bottom: 2rem;">
+                <div class="col-xs-6">
+                <strong>Cliente</strong>
+                <br>
+                <h1 class="h6">${nombre}</h1>
+                <h1 class="h6">RFC:<b>${rfc}</b></h1>
+                <h1 class="h6">Domicilio fiscal:<b>${cpostal}</b></h1>
+                </div>  
+            </div>
+
+            <hr style="height:1px;border:none;color:rgb(0, 0, 0);background-color:rgb(0, 0, 0);">
+            <div class="row">
+                <div class="col-xs-12">
+                <table class="table table-condensed table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th style="background-color: rgb(183, 183, 244);">Código</th>
+                        <th style="background-color: rgb(183, 183, 244);">Clave unidad</th>
+                        <th style="background-color: rgb(183, 183, 244);">Descripción</th>
+                        <th style="background-color: rgb(183, 183, 244);">Valor unitario</th>
+                        <th style="background-color: rgb(183, 183, 244);">Cantidad</th>
+                        <th style="background-color: rgb(183, 183, 244);">Importe</th>
+                        <th style="background-color: rgb(183, 183, 244);">Descuento</th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableRows}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6" class="text-right"><b>Subtotal</b></td>
+                        <td align="right">$ ${SubTotal}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-right"><b>Descuento</b></td>
+                        <td align="right">$ ${descuentotal}</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="6" class="text-right"><b>Impuestos</b></td>
+                        <td align="right">$ ${iva}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-right">
+                            <h4><b><u>Total</u></b></h4>
+                        </td>
+                        <td>
+                            <h4 align="right">MXN ${total}</h4>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <p class="h5" style="background-color: rgb(183, 183, 244); font-family: Arial, Helvetica, sans-serif; font-size: 25px;">Gracias por su compra</p>
+                </div>
+            <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br> <br>
+            </div>
+            <hr>
+            <div class="row">
+            <div class="col-xs-2">
+                <img src="${qr}" />
+                <br>
+            
+            </div>
+            
+            <div class="col-xs-4 text-left ">
+                <h1 class="h6">Folio fiscal</h1>
+                <h1 class="h6"><b>4f29af12-5647-405f-b895-4af2d3576dbf</b></h1>
+                <h1 class="h6">Rfc proveedor fiscal</h1>
+                <h1 class="h6"><b>SPR190613I52</b></h1>
+                <h1 class="h6">Cadena original del timbre</h1>
+                <h6 style="font-size: 6pt;" ><small>||1.1|4f29af12-5647-405f-b895-4af2d3576dbf|2023-02-14T15:12:10|SPR190613I52|NIAELZT2c63kac/oJCiCkUx9Q
+                LkVnIoTBgVZ9VIqtVvANyy9fkrCj12BSytofptDkVoEMQQQwTc9AHrNPttJdg6ktZbfOrUP4MhKvRxthYZKsweI7y0yuSfyC
+                0Q7cPBaRQRnJqLMzBy35sMo2cnjWMVChhJ4L3khX6jD2jlGS6vg9AByyv8FUG+IktccA/mYwZRe+by5awvaHB0FMZaXC
+                BMKU0ofx6rlWWYXRVjvyDPcKtG+oLShGGFvU7goaYTVL2dN7KdtTbuQnTTent7lkhojL0agBQDHpTEB4ZPWqxHwiHIH
+                WQWZslEZi8DP6LIPn1N/+AV0pJPEcaYU1Rcp6w==|30001000000400002495||</small></h6>
+            
+            </div>
+            <div class="col-xs-3">
+                <h1 class="h6">Número de certificado SAT</h1>
+                <h1 class="h6"><b>30001000000400002495</b></h1>
+                <h1 class="h6">Sello digital del SAT</h1>
+                <h6 style="font-size: 6pt;" ><small>
+                gNfCgMlCnSXYNgspQ6K0NkMLMahxchCO4mtFHb2JN8
+                NSOe7CBTgm0Tm34UQ6JnnKE/rQD1LiR6AQxw6KaRP
+                O6iZtXuN0+/9soghzYihZM9cFJZJ9JDFqAqVYUJB9Etls53k
+                ols2VFFrvxP4iGRErYpnUiJfPw0XBy/QufEn0XhaVGJqaP
+                msg6k3XcFZTsytK4gU0p39n8QeM9B9KwYm3gVYm2bT
+                A//N+CYkoRqP5PMZEDkgAhXMxL02ek0y6rUkyICX2pr3
+                Kp8C9KYsuva/iKizGzF7puofi4IjWrh0LCXT9mlW81MRm
+                LIOY8zw11T9nHzAEtye73uXQZWu1cSY1+A==
+                </small></h6>
+                
+                <br>
+            
+        </div>
+        <div class="col-xs-3">
+                <h1 class="h6">Fecha y hora de certificación</h1>
+                <h1 class="h6">LUGARDELQR:<b>14 Feb. 2023 - 15:12:10</b></h1>
+                <h1 class="h6">LUGARDELQR:Sello digital del CFDI</h1>
+                <h6 style="font-size: 6pt;" ><small>NIAELZT2c63kac/oJCiCkUx9QLkVnIoTBgVZ9VIqtVvANyy
+                9fkrCj12BSytofptDkVoEMQQQwTc9AHrNPttJdg6ktZbfO
+                rUP4MhKvRxthYZKsweI7y0yuSfyC0Q7cPBaRQRnJqLMz
+                By35sMo2cnjWMVChhJ4L3khX6jD2jlGS6vg9AByyv8FUG
+                +IktccA/mYwZRe+by5awvaHB0FMZaXCBMKU0ofx6rlW
+                WYXRVjvyDPcKtG+oLShGGFvU7goaYTVL2dN7KdtTbuQ
+                nTTent7lkhojL0agBQDHpTEB4ZPWqxHwiHIHWQWZslE
+                Zi8DP6LIPn1N/+AV0pJPEcaYU1Rcp6w==                    
+                </small></h6>
+                
+                <br>         
+        </div>
+        </div>
+        </div>
+    </body>
+
+    </html>

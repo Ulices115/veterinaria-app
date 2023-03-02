@@ -1,0 +1,178 @@
+
+    <!DOCTYPE html>
+    <html lang="es">
+
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+            integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Facturas</title>
+        <style>
+          .logo{
+            width: 100px;
+            height: 100px;
+            border-spacing: 10;
+            border:solid green 2px;
+            border-radius:15px;
+          }
+
+            
+    </style>
+    </head>
+
+    <body>
+        <div class="container-fluid">
+            <div class="row" style="margin-block-end: -20px;">
+                <div class="col-xs-10 ">
+                    <h1>Factura</h1>
+                </div>
+                <div class="col-xs-2" >
+                    <img class="img img-responsive logo" src="https://static.vecteezy.com/system/resources/thumbnails/006/470/430/small/modern-animal-pet-logo-template-free-vector.jpg"  alt="Logotipo">
+                </div>
+            </div>
+            <hr>
+            <div class="row ">
+                <div class="col-xs-9 ">
+                <strong>Remitente</strong>
+                    <br>
+                    <h1 class="h6">${nombre_e}</h1>
+                    <h1 class="h6">RFC:<b>${rfc_e}</b></h1>
+                    <h1 class="h6">Lugar de expedición:<b>${lugar_exp}</b></h1>
+                    <br>
+                
+                </div>
+                <div class="col-xs-3 ">
+                    <strong>Fecha de emisión</strong>
+                    <br>
+                    ${new Date().toLocaleDateString('es-mx', { weekday:"long", year:"numeric", month:"short", day:"numeric"}) } <br>
+                    <strong>Factura No.</strong>
+                    <br>
+                    ${String(folio).slice(1)}
+                </div>
+            </div>
+            <hr>
+            <div class="row" style="margin-bottom: 2rem;">
+                <div class="col-xs-6">
+                <strong>Cliente</strong>
+                <br>
+                <h1 class="h6">${nombre}</h1>
+                <h1 class="h6">RFC:<b>${rfc}</b></h1>
+                <h1 class="h6">Domicilio fiscal:<b>${cpostal}</b></h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                <table class="table table-condensed table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Clave unidad</th>
+                        <th>Descripción</th>
+                        <th>Valor unitario</th>
+                        <th>Cantidad</th>
+                        <th>Importe</th>
+                        <th>Descuento</th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableRows}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6" class="text-right"><b>Subtotal</b></td>
+                        <td align="right">$ ${SubTotal}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-right"><b>Descuento</b></td>
+                        <td align="right">$ ${descuentotal}</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="6" class="text-right"><b>Impuestos</b></td>
+                        <td align="right">$ ${iva}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-right">
+                            <h4><b>Total</b></h4>
+                        </td>
+                        <td>
+                            <h4 align="right">MXN ${total}</h4>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <p class="h5">Gracias por su compra</p>
+                </div>
+            <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br> <br>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-xs-3 colmargen">
+                    <h1 class="h6">Número de certificado SAT</h1>
+                    <h1 class="h6"><b>${Nocertificadosat}</b></h1>
+                </div>
+                <div class="col-xs-3  colauto">
+                    <h1 class="h6">Folio fiscal</h1>
+                    <h1 class="h6"> <small><b>${UUID}</b></small> </h1>
+                   </div>
+                   <div class="col-xs-3 colauto">
+                       <h1 class="h6">Fecha de timbrado</h1>
+                       <h1 class="h6"><b>${fechatimbrado}</b></h1>
+                   </div>
+                   <div class="col-xs-3">
+                       <h1 class="h6">Rfc proveedor fiscal</h1>
+                       <h1 class="h6"><b>${rfc_prov}</b></h1>
+                   </div>
+            </div>
+            <div class="row">
+             <div class="col-xs-3">
+                <img src="${qr}"/>
+                <br>
+             </div>
+             <div class="col-xs-9">
+                <h1 class="h6">Sello digital del SAT</h1>
+                <h6 style="font-size: 6pt;"><small>
+                    Se/QQQKProT5Ci/+4r3+mjYyqLXSbdZfC/LOdWYv5n
+                    +M8NcdcN47VOh2iZ0ZdmpCPhco7VoBpoEHoWNg2Bjl
+                    Z/KEi7PiQL/Is4jg+SJmupOK3LS0wPbVCZdtR26w88
+                    8cBWChF0YsJbLZimBQym3HO0pVf34VD/vbbAa6Zy+o
+                    27AbjTv4ipCJs5gjtl6pphW59lJTZ0lrW8H884LRo/
+                    V8VPUErbGo8wO5gY4lJbdKrsSPSITQ9DtsxMq+lcD4
+                    u+lE/IXuQ5UqO4GZV2hdYefkhv9Ui5bWEsQezpiKv0
+                    khZkYKfXRFsxtZJI3H9613UC5nCKMO3FcyRD8tzfqo
+                    UP8bww==
+                    
+                </small></h6>
+                <h1 class="h6">Sello digital del CFDI</h1>
+                <h6 style="font-size: 6pt;" ><small>
+                    JrvvNAx/diDwTdEsdWt3HfSd679fhlOFYf4J8uuhMJ
+                    jjA7werMAXA/VpQdDft4IiFlxlvYLV89KzEWNc7E9L
+                    pvmtXMIeZLqh2Ec8IqYu53weSpD/T+WbubU3jKphu4
+                    INTGM2FJBrd6UNRnOfLOv4Swb4b5kNtE5qAfnKJJDK
+                    dACPV2Oq/0hXccGjoYjtVIu/yMPAPSiHbN7xFuEaPA
+                    n3IpOJblqrc2F+3IyTFOcO8C2QktIWskhlHxhQYSH7
+                    8J6LVMMlAyIjECiNCZVGPYbD9QmYuoCDKBEmu1185c
+                    kOj0Pzmz+wNrCxVBUa5IDVkFhawIVBJm0z+mM4U9Vq
+                    0lQ2kw==        
+                </small></h6>
+                <h1 class="h6">Cadena original del timbre</h1>
+                <h6 style="font-size: 6pt;" ><small>||1.1|4f29af12-5647-405f-b895-4af2d3576dbf|2023-02-14T15:12:10|SPR190613I52|NIAELZT2c63kac/oJCiCkUx9Q
+                LkVnIoTBgVZ9VIqtVvANyy9fkrCj12BSytofptDkVoEMQQQwTc9AHrNPttJdg6ktZbfOrUP4MhKvRxthYZKsweI7y0yuSfyC
+                0Q7cPBaRQRnJqLMzBy35sMo2cnjWMVChhJ4L3khX6jD2jlGS6vg9AByyv8FUG+IktccA/mYwZRe+by5awvaHB0FMZaXC
+                BMKU0ofx6rlWWYXRVjvyDPcKtG+oLShGGFvU7goaYTVL2dN7KdtTbuQnTTent7lkhojL0agBQDHpTEB4ZPWqxHwiHIH
+                WQWZslEZi8DP6LIPn1N/+AV0pJPEcaYU1Rcp6w==|30001000000400002495||</small></h6>
+            
+            </div>
+            </div>
+        
+    </body>
+
+    </html>
