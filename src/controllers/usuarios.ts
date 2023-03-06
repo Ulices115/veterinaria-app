@@ -38,7 +38,7 @@ export class usuarios{
                 as: "Descripcion"
               }},
               { $unwind: "$Descripcion"}, 
-              { $match: {$or:[{'ubicacion':id},{ "nombre": {'$regex': `^${id}`,'$options': 'i'}},{ "ubicaciones": {'$regex': `^${id}`,'$options': 'i'}},{'Descripcion.descripcion': {'$regex': `^${id}`,'$options': 'i'}}]}},
+              { $match: {$or:[{'ubicacion':id},{ "nombre": {'$regex': `^${id}`,'$options': 'i'}},{ "ubicaciones": {'$regex': `^${id}`,'$options': 'i'}},{ "correo": {'$regex': `^${id}`,'$options': 'i'}},{'Descripcion.descripcion': {'$regex': `^${id}`,'$options': 'i'}}]}},
             //   { $match: },
               { $match: {estado:true}},
         ])
