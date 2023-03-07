@@ -10,7 +10,7 @@
     "clean": "del build",
     "dev": "ts-node-dev src/app.ts",
     "tsc": "tsc",
-    "start": "npm install && npm install -g pm2 && pm2 startup && pm2 save && node build/src/app.js"
+    "start": "npm install && node build/src/app.js"
   },
   "keywords": [],
   "author": "",
