@@ -28,6 +28,7 @@ export class auditoria{
           valor_anterior,
           nuevo_valor
         }
+        
         console.log('auditoria creada');
         // console.log(data)    
         const auditoria = await new Auditoria(data);
