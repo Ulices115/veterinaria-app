@@ -15,6 +15,7 @@ class auditoria {
     constructor() {
         this.auditorias = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const id_inventario = req.body.id_inventario.toUpperCase();
+            const id_usuario = req.body.id_usuario;
             const usuario = req.body.usuario.toUpperCase();
             const fecha = req.body.fecha;
             const razon = req.body.razon;
@@ -29,6 +30,7 @@ class auditoria {
             // } 
             const data = {
                 id_inventario,
+                id_usuario,
                 usuario,
                 fecha,
                 razon,

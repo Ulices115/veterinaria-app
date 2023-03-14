@@ -17,6 +17,10 @@ const AuditoriaSchema = new mongoose_1.Schema({
         type: String,
         required: [true, 'id_inventario obligatorio'],
     },
+    id_usuario: {
+        type: String,
+        required: [true, 'id_usuario obligatorio'],
+    },
     usuario: {
         type: String,
         required: [true, 'usuario obligatorio'],

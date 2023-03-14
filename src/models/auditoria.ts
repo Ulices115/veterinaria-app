@@ -14,6 +14,11 @@ const AuditoriaSchema = new Schema<Iauditoria>({
         required: [true, 'id_inventario obligatorio'],
      
     },
+    id_usuario: {
+        type: String,
+        required: [true, 'id_usuario obligatorio'],
+     
+    },
     usuario: {
         type: String,
         required: [true, 'usuario obligatorio'],
