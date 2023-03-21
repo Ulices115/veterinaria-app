@@ -85,7 +85,7 @@ export class Controller{
 
     const key = './src/CSD_emisor/key.key';
     const cer = `./src/CSD_emisor/certificado.cer`;
-    const styleSheet = './src/CSD_emisor/cadenaoriginal_4_0.xslt';
+    // const styleSheet = './src/CSD_emisor/cadenaoriginal_4_0.xslt';
     var fecha = new Date().toString();
     var date = moment(fecha).format('YYYY-MM-DDThh:mm:ss')
     // const fecha =moment.tz('America/Mexico_City').format('YYYY-MM-DDThh:mm:ss'); 
@@ -143,7 +143,7 @@ export class Controller{
     };
     
     const cfdi = new CFDI(comprobanteAttribute, {
-     xslt: styleSheet,
+    //  xslt: styleSheet,
      debug: false
     });
     await cfdi.setAttributesXml({version: '1.0', encoding: 'utf-8'});
