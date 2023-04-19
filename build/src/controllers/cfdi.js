@@ -89,7 +89,7 @@ class Controller {
                 var tipo_comprobante = configuracion[0]['tipo_comprobante'];
                 const key = './src/CSD_emisor/key.key';
                 const cer = `./src/CSD_emisor/certificado.cer`;
-                // const styleSheet = './src/CSD_emisor/cadenaoriginal_4_0.xslt';
+                const styleSheet = './src/CSD_emisor/cadenaoriginal_4_0.xslt';
                 var fecha = new Date().toString();
                 var date = (0, moment_timezone_1.default)(fecha).format('YYYY-MM-DDThh:mm:ss');
                 // const fecha =moment.tz('America/Mexico_City').format('YYYY-MM-DDThh:mm:ss'); 
@@ -146,7 +146,7 @@ class Controller {
                     Exportacion: `${exportacion}`
                 };
                 const cfdi = new core_1.CFDI(comprobanteAttribute, {
-                    //  xslt: styleSheet,
+                    xslt: styleSheet,
                     debug: false
                 });
                 yield cfdi.setAttributesXml({ version: '1.0', encoding: 'utf-8' });
